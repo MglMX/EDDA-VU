@@ -1,0 +1,150 @@
+---
+title: "Assignment 1"
+author: "John Doe and Jane Roe, group 00"
+date: "1 February 2018"
+output: pdf_document
+fontsize: 11pt
+highlight: tango
+---
+
+## Introduction to R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. R Markdown files permit you to interweave R code with ordinary text to produce well-formatted data analysis reports that are easy to modify. The R Markdown file itself shows the readers exactly how you got the results in your report.
+For more details on using R Markdown see [http://rmarkdown.rstudio.com](http://rmarkdown.rstudio.com).
+
+When you click the **Knit** button, a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. 
+For inline R code, surround code with back ticks and r. R replaces inline code with its results. For example, two plus one is `r 2+1`;
+for the build-in R dataset `cars`, there were `r nrow(cars)` 
+cars studied. You can embed an R code chunk like this:
+
+```{r}
+summary(cars)
+```
+
+### Figures
+
+You can also embed plots, for example:
+
+```{r,echo=FALSE,fig.height=3.5}
+plot(cars)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot. Use knitr options to style the output of a chunk. Place options in brackets above the chunk.
+Other options with the defaults are: the `eval=FALSE` option just displays the R code (and does not run it); `warning=TRUE` whether to display warnings; `tidy=TRUE` wraps long code so it does not run off the page.
+
+You can control the size and placement of figures. For example, 
+you can put two figures (or more) next to each other. 
+Use `par(mfrow=c(n,m))` to create `n` by `m` plots in one picture in R.
+You can adjust the proportions of figures by using the `fig.width` 
+and `fig.height` chunk options. These are specified in inches, 
+and will be automatically scaled down to fit within the handout margin.
+Chunk option `fig.align`  takes values `left`, `right`, or `center` 
+(to align figures in the output document).
+
+```{r,fig.margin = TRUE,fig.width=6,fig.height=3,fig.align="center"}
+par(mfrow=c(1,2)); x1=rnorm(50); hist(x1); qqnorm(x1)
+```
+
+You can arrange for figures to span across the entire page by using 
+the `fig.fullwidth` chunk option. 
+
+```{r,fig.fullwidth=TRUE,fig.height=3}
+plot(iris$Sepal.Length,iris$Petal.Length,xlab="Sepal.Length",ylab="Petal.Length")
+```
+
+More about chunk options can be found at [\textcolor{blue}{https://yihui.name/knitr/options/}](https://yihui.name/knitr/options/).
+
+### Equations
+
+You can also include \LaTeX\ expessions/equations in your report:
+inline $\frac{d}{dx}\left(\int_{0}^{x} f(u)\,du\right)=f(x)$ and 
+in the display mode:
+\[
+\frac{d}{dx}\left( \int_{0}^{x} f(u)\,du\right)=f(x).
+\]
+ 
+### Footnotes
+
+Here is the use of a footnote^[This is a footnote.]. 
+
+### Images
+Want an image? This will do it. 
+To depict an image (say, `my_image.jpg` which should be in your current working directory), use this command 
+
+![caption for my image](my_image.jpg)
+
+### Tables
+
+Want a table? This will create one (note that the separators 
+*do not* have to be aligned).
+
+Table Header  | Second Header
+------------- | -------------
+Table Cell    | Cell 2
+Cell 3        | Cell 4 
+
+
+You can also make table by using knit's `kable` function:
+
+```{r echo=FALSE, results='asis'}
+library(knitr)
+kable(mtcars[1:5,],caption="A knit kable.")
+```
+
+### Block quote
+> This will create a block quote, 
+> if you want one.
+
+### Verbatim
+```
+This text is displayed verbatim/preformatted.
+```
+
+### Links
+Links: http://example.com, [in-text link to Google](http://google.com),
+[linked phrase](http://example.com).
+
+### Italicized and embolded text
+- Single asterisks italicize text *like this*. 
+- Double asterisks embolden text **like this**.
+
+One more way: _italic_ and __bold__.
+
+***
+
+
+## \textcolor{blue}{Exercises}
+
+### Exercise 1
+
+**(i)** Here are some consequitive R-commands.
+```{r}
+x=rep(c("A","B"),each=5); x
+sample(x)
+x=rnorm(100)
+```
+Now the same code chunk but with all the output collapsed into signle block.
+```{r, collapse=TRUE}
+x=rep(c("A","B"),each=5); x
+sample(x)
+x=rnorm(100)
+```
+
+**(ii)** Below we perform a one sample t-test for the artificial date 
+(that we generated ourselves).
+```{r}
+mu=0.2
+x=rnorm(100,mu,1) # creating artificial data
+t.test(x,mean=0)   # t.test(x,alternative=c("two.sided"),conf.level=0.95,mu=10)
+```
+
+**(iii)** We often do not need to report the whole output of R-commands, only certain values of the output. For example, below we perform a two-sample t-test and report only the (appropriately rounded) values of t-statistics and the p-pavue.
+
+```{r}
+mu=0;nu=0.5
+x=rnorm(50,mu,1); y=rnorm(50,nu,1) # creating artificial data
+ttest=t.test(x,y) 
+```
+
+The value of t-statistics in the above evaluation is  `r round(ttest[[1]],2)` and the p-value is `r round(ttest[[3]],4)`.
+  
