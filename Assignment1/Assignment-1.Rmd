@@ -1,150 +1,218 @@
 ---
 title: "Assignment 1"
-author: "John Doe and Jane Roe, group 00"
-date: "1 February 2018"
-output: pdf_document
+author: "Tanjina Islam and Miguel Morales Expósito, group 03"
+date: "14 February 2018"
+output:
+  pdf_document:
+    fig_caption: yes
 fontsize: 11pt
 highlight: tango
 ---
 
-## Introduction to R Markdown
+## Exercise 1
+We load the data from the data source and setup the size of the screen.
+```{r}
+load(file="assign1.RData")
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. R Markdown files permit you to interweave R code with ordinary text to produce well-formatted data analysis reports that are easy to modify. The R Markdown file itself shows the readers exactly how you got the results in your report.
-For more details on using R Markdown see [http://rmarkdown.rstudio.com](http://rmarkdown.rstudio.com).
 
-When you click the **Knit** button, a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. 
-For inline R code, surround code with back ticks and r. R replaces inline code with its results. For example, two plus one is `r 2+1`;
-for the build-in R dataset `cars`, there were `r nrow(cars)` 
-cars studied. You can embed an R code chunk like this:
+```
+
+### Dataset x1  
+```{r, fig.height=3, fig.width=2.5, fig.align='center',fig.show='hold'}
+hist(x1);
+qqnorm(x1);qqline(x1);
+```
+We can see that the histogram does not show a normal distribution but it is probably because the size of the sample is very small.However, the QQ-plot shows that the distribution is normal.
+
+We can see the similarities with a QQ-plot of a normal distribution of the same size.
+```{r, fig.height=3, fig.width=2.5, fig.align='center',fig.show='hold'}
+qqnorm(rnorm(length(x1)));qqline(rnorm(length(x1)))
+```
+
+### Dataset x2  
+```{r, fig.height=3, fig.width=2.5, fig.align='center',fig.show='hold'}
+hist(x2);
+qqnorm(x2);qqline(x2)
+```
+Both the histogram and QQ-plot do not show that the distribution is normal. The QQ-plot shows deviated tails.
+
+We can compare the QQ-plot to one representing a sample with normal distribution of the same size.
+```{r, fig.height=3, fig.width=2.5, fig.align='center',fig.show='hold'}
+qqnorm(rnorm(length(x2)));qqline(rnorm(length(x2)))
+```
+
+### Dataset x3  
+```{r, fig.height=3, fig.width=2.5, fig.align='center',fig.show='hold'}
+hist(x3);
+qqnorm(x3);qqline(x3)
+```
+Both the histogram and QQ-plot show that the sample follows a normal distribution.
+
+### Dataset x4  
+```{r, fig.height=3, fig.width=2.5, fig.align='center',fig.show='hold'}
+hist(x4);
+qqnorm(x4);qqline(x4)
+```
+The histogram does not show a normal distribution but the QQ-plot does.
+
+We can see the similarities with a QQ-plot of a normal distribution of the same size.
+```{r, fig.height=3, fig.width=2.5, fig.align='center',fig.show='hold'}
+qqnorm(rnorm(length(x4)));qqline(rnorm(length(x4)))
+```
+### Dataset x5  
+```{r, fig.height=3, fig.width=2.5, fig.align='center',fig.show='hold'}
+hist(x5);
+qqnorm(x5);qqline(x5)
+```
+Neither the histogram nor the QQ-plot depìct a normal distribution.
+
+The QQ-plot is not similar to one of a normal distribution of the same size as x5.
+
+```{r, fig.height=3, fig.width=2.5, fig.align='center',fig.show='hold'}
+qqnorm(rnorm(length(x5)));qqline(rnorm(length(x5)))
+```
+
+## Exercise 2
+
+First we define a function to generate the list of p-values after running the tests 1000 times. The function takes by arguments *m*,*n*,*mu*,*nu* and *sd*.
 
 ```{r}
-summary(cars)
-```
-
-### Figures
-
-You can also embed plots, for example:
-
-```{r,echo=FALSE,fig.height=3.5}
-plot(cars)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot. Use knitr options to style the output of a chunk. Place options in brackets above the chunk.
-Other options with the defaults are: the `eval=FALSE` option just displays the R code (and does not run it); `warning=TRUE` whether to display warnings; `tidy=TRUE` wraps long code so it does not run off the page.
-
-You can control the size and placement of figures. For example, 
-you can put two figures (or more) next to each other. 
-Use `par(mfrow=c(n,m))` to create `n` by `m` plots in one picture in R.
-You can adjust the proportions of figures by using the `fig.width` 
-and `fig.height` chunk options. These are specified in inches, 
-and will be automatically scaled down to fit within the handout margin.
-Chunk option `fig.align`  takes values `left`, `right`, or `center` 
-(to align figures in the output document).
-
-```{r,fig.margin = TRUE,fig.width=6,fig.height=3,fig.align="center"}
-par(mfrow=c(1,2)); x1=rnorm(50); hist(x1); qqnorm(x1)
-```
-
-You can arrange for figures to span across the entire page by using 
-the `fig.fullwidth` chunk option. 
-
-```{r,fig.fullwidth=TRUE,fig.height=3}
-plot(iris$Sepal.Length,iris$Petal.Length,xlab="Sepal.Length",ylab="Petal.Length")
-```
-
-More about chunk options can be found at [\textcolor{blue}{https://yihui.name/knitr/options/}](https://yihui.name/knitr/options/).
-
-### Equations
-
-You can also include \LaTeX\ expessions/equations in your report:
-inline $\frac{d}{dx}\left(\int_{0}^{x} f(u)\,du\right)=f(x)$ and 
-in the display mode:
-\[
-\frac{d}{dx}\left( \int_{0}^{x} f(u)\,du\right)=f(x).
-\]
- 
-### Footnotes
-
-Here is the use of a footnote^[This is a footnote.]. 
-
-### Images
-Want an image? This will do it. 
-To depict an image (say, `my_image.jpg` which should be in your current working directory), use this command 
-
-![caption for my image](my_image.jpg)
-
-### Tables
-
-Want a table? This will create one (note that the separators 
-*do not* have to be aligned).
-
-Table Header  | Second Header
-------------- | -------------
-Table Cell    | Cell 2
-Cell 3        | Cell 4 
-
-
-You can also make table by using knit's `kable` function:
-
-```{r echo=FALSE, results='asis'}
-library(knitr)
-kable(mtcars[1:5,],caption="A knit kable.")
-```
-
-### Block quote
-> This will create a block quote, 
-> if you want one.
-
-### Verbatim
-```
-This text is displayed verbatim/preformatted.
-```
-
-### Links
-Links: http://example.com, [in-text link to Google](http://google.com),
-[linked phrase](http://example.com).
-
-### Italicized and embolded text
-- Single asterisks italicize text *like this*. 
-- Double asterisks embolden text **like this**.
-
-One more way: _italic_ and __bold__.
-
-***
-
-
-## \textcolor{blue}{Exercises}
-
-### Exercise 1
-
-**(i)** Here are some consequitive R-commands.
-```{r}
-x=rep(c("A","B"),each=5); x
-sample(x)
-x=rnorm(100)
-```
-Now the same code chunk but with all the output collapsed into signle block.
-```{r, collapse=TRUE}
-x=rep(c("A","B"),each=5); x
-sample(x)
-x=rnorm(100)
-```
-
-**(ii)** Below we perform a one sample t-test for the artificial date 
-(that we generated ourselves).
-```{r}
-mu=0.2
-x=rnorm(100,mu,1) # creating artificial data
-t.test(x,mean=0)   # t.test(x,alternative=c("two.sided"),conf.level=0.95,mu=10)
-```
-
-**(iii)** We often do not need to report the whole output of R-commands, only certain values of the output. For example, below we perform a two-sample t-test and report only the (appropriately rounded) values of t-statistics and the p-pavue.
-
-```{r}
-mu=0;nu=0.5
-x=rnorm(50,mu,1); y=rnorm(50,nu,1) # creating artificial data
-ttest=t.test(x,y) 
-```
-
-The value of t-statistics in the above evaluation is  `r round(ttest[[1]],2)` and the p-value is `r round(ttest[[3]],4)`.
+get_p_values<-function(m,n,mu,nu,sd,iter=1000){
+  B=iter
+  p=numeric(B)
   
+  for(b in 1:B){
+    x=rnorm(m,mu,sd)
+    y=rnorm(n,nu,sd)
+    p[b]=t.test(x,y,var.equal = TRUE)[[3]]
+  }
+  return(p)
+}
+```
+
+**(1) Test values: mu=nu=180, m=n=30 and sd=10.**
+
+We obtain the number of p-values smaller that 5%
+```{r}
+p=get_p_values(30,30,180,180,10)
+p_amount=sum(p<0.05)
+power95=mean(p<0.05)
+```
+There are `r p_amount` values smaller than 5%. The power of the test is `r power95` with 95% confidence.
+
+We obtain the number of p-values smaller that 10%
+```{r}
+p_amount=sum(p<0.10)
+power90=mean(p<0.10)
+```
+There are `r p_amount` values smaller than 10%. The power of the test is `r power90` with 90% confidence.
+
+```{r,fig.height=3, fig.width=2.5, fig.align='center',fig.show='hold'}
+hist(p)
+```
+
+
+**Findings:** The statistical power of `r power95` and `r power90` indicate that the probability of correctly rejecting $H_{0}$(*mu* == *nu*) is very low. This makes sense because in this test *mu* an *nu* are equal. Checking the histogram be see that the p-values follow a uniform distribution which indicates that $H_{0}$ is true.
+
+**(2) Test values: mu=nu=180, m=n=30 and sd=1.**
+
+We obtain the number of p-values smaller that 5%
+```{r}
+p=get_p_values(30,30,180,180,1)
+p_amount=sum(p<0.05)
+power95=mean(p<0.05)
+```
+There are `r p_amount` values smaller than 5%. The power of the test is `r power95` with 95% confidence.
+
+We obtain the number of p-values smaller that 10%
+```{r}
+p_amount=sum(p<0.10)
+power90=mean(p<0.10)
+```
+There are `r p_amount` values smaller than 10%. The power of the test is `r power90` with 90% confidence.
+
+```{r,fig.height=3, fig.width=2.5, fig.align='center',fig.show='hold'}
+hist(p)
+```
+
+**Findings:** The statistical power of `r power95`and `r power90` indicate that the probability of correctly rejecting $H_{0}$(*mu* == *nu*) is very low. This makes sense because in this test *mu* an *nu* are equal. Checking the histogram be see that the p-values follow a uniform distribution which indicates that $H_{0}$ is true.
+
+**(3) Test values: mu=180, nu=175, m=n=30 and sd=6.**
+
+We obtain the number of p-values smaller that 5%
+```{r}
+p=get_p_values(30,30,180,175,6)
+p_amount=sum(p<0.05)
+power95=mean(p<0.05)
+```
+There are `r p_amount` values smaller than 5%. The power of the test is `r power95` with 95% confidence.
+
+We obtain the number of p-values smaller that 10%
+```{r}
+p_amount=sum(p<0.10)
+power90=mean(p<0.10)
+```
+There are `r p_amount` values smaller than 10%. The power of the test is `r power90` with 90% confidence.
+
+```{r,fig.height=3, fig.width=2.5, fig.align='center',fig.show='hold'}
+hist(p)
+```
+
+**Findings:** The statistical power of `r power95` and `r power90` indicate that the probability of correctly rejecting $H_{0}$(*mu* == *nu*) is high. This makes sense because in this test *mu* an *nu* are different. Checking the histogram be see that the p-values do not follow a uniform distribution which they would if $H_{0}$ was true.
+
+## Exercise 3
+First we define a function to get the powers for the t-test for every value in *values* as *nu*.
+```{r}
+get_powers<-function(m,n,mu,sd,values,iter=1000){
+  powers = numeric(length(values))
+  i=1
+  for(nu in values){
+    p=get_p_values(m,n,mu,nu,sd,iter=iter)
+    powers[i]=mean(p<0.05)
+    i=i+1
+  }
+  return(powers)
+}
+```
+We define the values of nu.
+```{r}
+values = seq(175,185,by=0.1)
+```
+
+**(1) Test values: mu=180, m=n=30 and sd=6.**
+We calculate the powers for each value of *nu*.
+```{r}
+powers=get_powers(30,30,180,6,values)
+```
+We plot the power as a function of *nu*.
+```{r,fig.height=4.5, fig.fullwidth = TRUE, fig.align='center',fig.show='hold'}
+plot(values,powers)
+```
+
+**(2) Test values: mu=180, m=n=100 and sd=5.**
+We calculate the powers for each value of *nu*.
+```{r}
+powers=get_powers(100,100,180,5,values)
+```
+We plot the power as a function of *nu*.
+```{r,fig.height=4.5, fig.fullwidth = TRUE, fig.align='center',fig.show='hold'}
+plot(values,powers)
+```
+
+
+**(3) Test values: mu=180, m=n=30 and sd=100.**
+We calculate the powers for each value of *nu*.
+```{r}
+powers=get_powers(30,30,180,100,values)
+```
+We plot the power as a function of *nu*.
+```{r,fig.height=4.5, fig.fullwidth = TRUE, fig.align='center',fig.show='hold'}
+plot(values,powers)
+```
+
+**(4) Findings:** With the first two plots we can see how the power of the test decreases when the *nu* values get closer to *mu* and it increases when *nu* values differ from *mu*. This indicates that the probability of correctly rejecting $H_{0}$ ( *mu* == *nu*) is higher when *nu* values differ more from *mu* and it gets lower the closer the values get to *mu*.
+
+We see that the bigger the population is, the easier it is to decide whether we should reject $H_{0}$ or not by looking at the power.
+
+In the last plot we see that, with the same population but with a high standard deviation, we get low power values for any *nu* values while in the other plots we were getting high power values for the same nu values.
+
