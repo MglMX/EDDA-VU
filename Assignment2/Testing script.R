@@ -162,6 +162,74 @@ binom.test(n_bigger,n,p=0.9)
 #With a p value of 0.002 we can reject that at most 10% of the parts arrive later than 72 days. 
 # If we check the confidence intervals 0.64 and 0.87, this means that between 13% and 36% of the pieces arrive later than 72 days (Can we say this?)
 
+#Exercise 4
+Clouds<-read.table("clouds.txt",header = TRUE);
+
+hist(Clouds$seeded)
+hist(Clouds$unseeded)
+
+differences=Clouds$seeded-Clouds$unseeded
+
+hist(differences)
+boxplot(Clouds$seeded,Clouds$unseeded)
+boxplot(differences)
+
+#4.1
+
+#Check if the differences come from a normal distribution
+qqnorm(differences)
+qqline(differences)
+shapiro.test(differences)
+#QQplot an shapiro indicate that the differences do not follow normal distribution
+#Maybe check something about order of the values??
+
+#T-test
+#Lecture 3 slide 25 says that paired t-test assumes that the differneces are a random sample from a normal population
+
+plot(Clouds$seeded~Clouds$unseeded,data=Clouds); abline(0,1)
+
+t.test(Clouds$seeded,Clouds$unseeded,paired = TRUE)
+
+#H0 is rejected. Mean of the differences is different from 0.
+
+#Mann-whitney-wilcoxon test. Lecture 4 slide 20
+wilcox.test(Clouds$seeded,Clouds$unseeded)
+#p-value indicates that H0 is rejected. The samples come from different populations
+
+#Kolmorov-Smirnov. Lecture 4 slide 22
+ks.test(Clouds$seeded,Clouds$unseeded);
+#p-value indicates that H0 is rejected. The samples come from different populations
+
+#4.2
+clouds_sq=sqrt(Clouds)
+clouds_sq
+
+#T-test
+t.test(clouds_sq$seeded,clouds_sq$unseeded,paired = TRUE)
+#p-value rejects H0. Mean of the diiferences is different from 0.
+
+#Mann-whitney-wilcoxon test
+wilcox.test(clouds_sq$seeded,clouds_sq$unseeded)
+#p-value indicates that H0 is rejected. The samples come from different populations
+
+#Kolmorov-Smirnov.
+ks.test(clouds_sq$seeded,clouds_sq$unseeded);
+#p-value indicates that H0 is rejected. The samples come from different populations
+
+#4.3
+clouds_sq_sq=sqrt(clouds_sq)
+#T-test
+t.test(clouds_sq_sq$seeded,clouds_sq_sq$unseeded,paired = TRUE)
+#p-value rejects H0. Mean of the diiferences is different from 0.
+
+#Mann-whitney-wilcoxon test
+wilcox.test(clouds_sq_sq$seeded,clouds_sq_sq$unseeded)
+#p-value indicates that H0 is rejected. The samples come from different populations
+
+#Kolmorov-Smirnov.
+ks.test(clouds_sq_sq$seeded,clouds_sq_sq$unseeded);
+#p-value indicates that H0 is rejected. The samples come from different populations
 
 
-
+#Findings: applying square root to the samples makes the p-value on the t-test to decrease.
+#while in the Mann-whitney-wilcoxon test and Kolmorov-sminorv test p-value remains the same after doing the test on the square rooted values.
