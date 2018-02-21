@@ -21,13 +21,13 @@ bootstrap_exp<-function(n,lambda){
   return(tstar)
 }
 
-lambda_values=seq(0.01,0.1,length=500)
+lambda_values=seq(0.01,0.1,length=100)
 lambda_values
 
 p_array=numeric(length(lambda_values))
 i=1
 for(lambda in lambda_values){
-  bootstrap_exp(n,lambda);
+  tstar=bootstrap_exp(n,lambda);
   pl=sum(tstar<t)/B;
   pr=sum(tstar>t)/B;
   p=2*min(pl,pr);
@@ -36,6 +36,21 @@ for(lambda in lambda_values){
 }
 
 p_array;
+p_not_reject=p_array[p_array>0.05] #We take the values where the p value would not reject H0
+p_not_reject
+indexes = match(p_not_reject,p_array);
+
+indexes;
+lambda_not_reject=numeric(length(indexes));
+count=1
+for(i in indexes){
+  lambda_not_reject[count]=lambda_values[i];
+  count=count+1;
+}
+
+#We cannot reject that the data stems from a exponential distribution with lambda values:
+lambda_not_reject
+
 
 length(lambda_values)
 length(p_array)
