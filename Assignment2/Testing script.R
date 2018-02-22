@@ -311,4 +311,79 @@ cor.test(Peruvians$migration,Peruvians$wrist); #Not correlated.
 cor.test(Peruvians$migration,Peruvians$systolic); #Not correlated
 cor.test(Peruvians$migration,Peruvians$diastolic); #Not correlated
 
+#Exercise 6
+
+#6.1 
+
+#This example looks very similar to the ones in Lecture 3 (23)
+Run<-read.table("run.txt")
+
+hist(Run$before)
+qqnorm(Run$before)
+qqline(Run$before)
+
+hist(Run$after)
+qqnorm(Run$after)
+qqline(Run$after)
+
+differences = Run$before-Run$after
+
+hist(differences)
+qqnorm(differences)
+qqline(differences)
+
+#The differences seem to come from a normal distribution
+
+plot(before~after,data=Run);
+abline(0,1)
+boxplot(Run$before,Run$after)
+boxplot(differences)
+
+
+#6.2
+
+Run_lemo = Run[which(Run$drink=="lemo"),]
+Run_energy = Run[which(Run$drink=="energy"),]
+
+t.test(Run_lemo$before,Run_lemo$after,paired = TRUE)
+#We cannot reject that the mean of the differences is 0. Therefore, we cannot say that the running speed is affected for the people who drink lemo
+
+t.test(Run_energy$before,Run_lemo$after,paired = TRUE)
+#We cannot reject that the mean of the differences is 0. Therefore, we cannot say that the running speed is affected for the people who drink energy drink
+
+
+#6.3
+
+differences_lemo = Run_lemo$before-Run_lemo$after
+differences_energy = Run_energy$before - Run_energy$after
+
+t.test(differences_lemo,differences_energy,paired=TRUE)
+#We cannot reject that the mean of the diffences is 0. Therefore, we cannot say that the time differences are affected by the type of drink
+
+#6.4 Lecture 3 (24)
+#A possible objection could be that the time taken between the two runs are not enough. According to http://www.sciencefocus.com/article/human-body/how-long-does-caffeine-take-kick
+#Cafeine takes around 45 minutes to kick in. So maybe half an hour was not enough to see the effects of the drinks in the running speed.
+
+#6.5 Lecture 3 (24)
+#The possible objection could be that 30 minutes is nor enough time to rest and do the second run in the same conditions as the first run.
+#(?)
+
+#6.6
+#The test assumes that the distribution of the differences is normal
+#Second question??? (Maybe something realted with one-way ANOVA?)
+
+qqnorm(differences_lemo);
+qqline(differences_lemo);
+
+qqnorm(differences_energy);
+qqline(differences_energy);
+
+#We can see that the distribution is normal
+
+#Exercise 7
+
+
+
+
+
 
