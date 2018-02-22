@@ -291,3 +291,24 @@ ks.test(clouds_sq_sq$seeded,clouds_sq_sq$unseeded);
 
 #Findings: applying square root to the samples makes the p-value on the t-test to decrease.
 #while in the Mann-whitney-wilcoxon test and Kolmorov-sminorv test p-value remains the same after doing the test on the square rooted values.
+
+#Exercise 5
+Peruvians<-read.table("peruvians.txt",header = TRUE);
+Peruvians=Peruvians #Deleting columns we don't need
+
+#5.1
+plot(Peruvians$migration~Peruvians$weight)
+pairs(Peruvians)
+
+#Looking at the graph generated we can say that migration is corelated with age and weight. 
+#There could maybe be also correlation with diastolic
+
+#5.2
+cor.test(Peruvians$migration,Peruvians$age); #Correlated.
+cor.test(Peruvians$migration,Peruvians$weight); #Correlated. 
+cor.test(Peruvians$migration,Peruvians$length); #Not correlated. 
+cor.test(Peruvians$migration,Peruvians$wrist); #Not correlated. 
+cor.test(Peruvians$migration,Peruvians$systolic); #Not correlated
+cor.test(Peruvians$migration,Peruvians$diastolic); #Not correlated
+
+
