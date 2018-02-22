@@ -381,9 +381,44 @@ qqline(differences_energy);
 #We can see that the distribution is normal
 
 #Exercise 7
+Dogs<-read.table("dogs.txt",header = TRUE);
 
+#7.1
+boxplot(Dogs$isofluorane,Dogs$halothane,Dogs$cyclopropane)
 
+qqnorm(Dogs$isofluorane);
+qqline(Dogs$isofluorane);
+#Doesn't seem normal
 
+qqnorm(Dogs$halothane);
+qqline(Dogs$halothane);
+#Seems normal
 
+qqnorm(Dogs$cyclopropane);
+qqline(Dogs$cyclopropane);
+#Seems normal
 
+#It is reasonable to say that halothane and cyclopropane come from normal populatino but nor isofluorane
 
+#7.2
+#One-way nova (?) Lecture 4 (26)
+#Creating data frame Lecture 4 (30)
+dogs_frame=data.frame(plasma=as.vector(as.matrix(Dogs)),anesthesia=factor(rep(1:3,each=10)));
+dogs_frame
+
+dogs_aov=lm(plasma~anesthesia,data=dogs_frame)
+anova(dogs_aov)
+
+#We get a p-value of 0.011. So H0 (mu1=mu2=mu3) is reject.
+
+summary(dogs_aov)
+confint(dogs_aov)
+
+#Estimated conecntration ?? 
+
+#7.3 Lecutre 4 (37)
+attach(dogs_frame)
+kruskal.test(plasma,anesthesia)
+
+#With a p-value of 0.06 we cannot (?) reject the null hypothesis mu1=mu2=mu3. 
+#In previous example we could reject the hypothesis but not in this one
