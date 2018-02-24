@@ -166,3 +166,29 @@ shapiro.test(energy_time_difference)
 # p- value = 0.2788. Therefore,the differences are taken from normal distribution.
 
 # How would you transform this vector into 24 residuals to investigate this assumption in QQ-plots? Make this QQ-plot(s).
+
+levels <- c("lemo", "lemo", "lemo", "lemo", "lemo", "lemo", "energy", "energy", "energy", "energy", "energy", "energy")
+
+# difference_data <- data.frame(first=lemo_time_difference, second=energy_time_difference, f=levels)
+# Two types = lemo and energy. Each contains 12 differences (before - after)
+
+difference_data <- data.frame(difference_soft =lemo_time_difference, difference_energy =energy_time_difference)
+difference_data
+
+runframe = data.frame(yeild=as.vector(as.matrix(difference_data)),  group = factor(rep(1:4, each=6)))
+runframe
+runaov = lm(yeild~group, data = runframe)
+anova(runaov)
+summary(runaov)
+confint(runaov)
+
+par(mfrow=c(1,2)); 
+for (i in 1:2) qqnorm(difference_data[,i])
+par(mfrow=c(1,1)); qqnorm(residuals(runaov))
+qqline(residuals(runaov)) # Normal
+
+# p-value for H0 i.e m0=m1=m2=m4 = 0.2622. Therefore, H0 is not rejected!! (or should I reject I'm confused again :D) 
+# Therefore, our assumption that is the differences are taken from Normal distribution is correct!
+
+# Exercise 7
+
