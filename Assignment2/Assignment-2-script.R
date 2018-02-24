@@ -175,7 +175,7 @@ levels <- c("lemo", "lemo", "lemo", "lemo", "lemo", "lemo", "energy", "energy", 
 difference_data <- data.frame(difference_soft =lemo_time_difference, difference_energy =energy_time_difference)
 difference_data
 
-runframe = data.frame(yeild=as.vector(as.matrix(difference_data)),  group = factor(rep(1:4, each=6)))
+runframe = data.frame(yeild=as.vector(as.matrix(difference_data)),  group = factor(rep(1:2, each=12)))
 runframe
 runaov = lm(yeild~group, data = runframe)
 anova(runaov)
@@ -187,8 +187,64 @@ for (i in 1:2) qqnorm(difference_data[,i])
 par(mfrow=c(1,1)); qqnorm(residuals(runaov))
 qqline(residuals(runaov)) # Normal
 
-# p-value for H0 i.e m0=m1=m2=m4 = 0.2622. Therefore, H0 is not rejected!! (or should I reject I'm confused again :D) 
+# p-value for H0 i.e m0=m1 = 0.154. Therefore, H0 is not rejected!! (or should I reject I'm confused again :D) 
 # Therefore, our assumption that is the differences are taken from Normal distribution is correct!
+
+# But for two samples I think we can just perform t-test!!! But I don't know how to relate this with 24 residuals!
+
+t.test(difference_data)
+par(mfrow=c(1,2)); 
+for (i in 1:2) qqnorm(difference_data[,i])
+par(mfrow=c(1,1)); qqnorm(residuals(runaov))
+qqline(residuals(runaov)) # Normal
+
+# p-value = 0.9652. So, we can't reject H0. So, the distribution is normal
 
 # Exercise 7
 
+dogs <- read.table("dogs.txt", header = TRUE)
+dogs
+
+# Task 1
+
+attach(dogs)
+# boxplot(isofluorane, halothane, cyclopropane, names = c("Isofluorane", "Halothane", "Cyclopropane") )
+boxplot(dogs, names = c("Isofluorane", "Halothane", "Cyclopropane") )
+
+qqnorm(isofluorane, main= "Q-Q Plot of Isofluorane" )
+qqline(isofluorane) # Not Normal
+shapiro.test(isofluorane)
+
+qqnorm(halothane, main= "Q-Q Plot of Halothane" )
+qqline(halothane) # Normal
+shapiro.test(halothane)
+
+qqnorm(cyclopropane, main= "Q-Q Plot of Cyclopropane" )
+qqline(cyclopropane) # Normal
+shapiro.test(cyclopropane)
+
+# Samples for halothane and cyclopropane may be come from normal population but isofluorane does not come from normal distribution
+
+# Task 2
+dogs
+boxplot(dogs)
+stripchart(dogs, vertical = TRUE)
+
+dogframe = data.frame(plasma=as.vector(as.matrix(dogs)),  group = factor(rep(1:3, each=10)))
+dogframe
+dog_aov = lm(plasma~group, data = dogframe)
+anova(dog_aov) # Not normal p - value = 0.011
+
+summary(dog_aov)
+confint(dog_aov)
+
+# p-value = 0.011. Therefore, Ho is rejected
+
+# Task 3
+
+attach(dogframe)
+kruskal.test(plasma, group)
+
+# p-value for H0: m0=m1=m2= 0.05948. So, H0 can not be rejected!
+
+# using kruskal we can not reject H0 but if we use the previous one we can reject H0
