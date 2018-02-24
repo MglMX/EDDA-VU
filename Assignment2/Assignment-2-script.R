@@ -66,3 +66,103 @@ shapiro.test(weight) # Not Normal
 # So, use the rank correlation test of Spearman.
 
 cor.test(migration, weight, method = "spearman") # There is no rank correlation!! ?? IDK how to explain
+
+# Exercise 6
+
+# Task 1
+
+run = read.table("run.txt", header = TRUE)
+run[,1:2]
+attach(run)
+
+# graph for before data 
+hist(before)
+qqnorm(before)
+qqline(before) # Not Normal #
+
+# graph for after data 
+hist(after)
+qqnorm(after)
+qqline(after) # Normal #
+
+# Before ~ After grah plotting 
+
+plot(before, after, main = "Before Vs After")
+abline(lm(after~before), col="red")
+boxplot(before, after, names = c("before", "after"))
+
+# Graph for the differences before-after
+
+hist(before-after)
+qqnorm(before-after)
+qqline(before-after) # Normal #
+boxplot(before-after, names = "before - after")
+
+# Check for normality
+
+shapiro.test(before-after) # proves our asumption that the difference is normal
+
+# Task 2
+
+lemo = run[which(drink == "lemo"),]
+lemo
+
+energy = run[which(drink == "energy"),]
+energy
+
+# Test for "Lemo"
+
+# Paired t-test assumes the differences are form normal distribution (Lec 3 - p 25)
+
+t.test(lemo$before, lemo$after, paired = TRUE) # We can not reject H0 i.e. the mean of the differences is 0
+
+# t-test assumes the data are form normal distribution (Lec 3 - p 6)
+
+t.test(lemo$before - lemo$after)
+
+
+# both paired t-test and one-sample t-test has the same p value. That is they are equivalent.
+
+# Test for "energy"
+
+t.test(energy$before, energy$after, paired = TRUE) # We can not reject H0 i.e. the mean of the differences is 0
+t.test(energy$before - energy$after)
+
+# both paired t-test and one-sample t-test has the same p value. That is they are equivalent.
+
+# Task 3
+
+time_difference = run$before - run$after
+time_difference
+
+lemo_time_difference = lemo$before - lemo$after
+lemo_time_difference
+
+energy_time_difference = energy$before - energy$after
+energy_time_difference
+
+t.test(lemo_time_difference, energy_time_difference) # Paired or Not Paired!!!
+
+t.test(lemo_time_difference)
+t.test(energy_time_difference)
+
+# We can not reject H0 i.e. the mean of the differences is 0. So, we can not say whether it is affected by the type of drink! Even if we do one sample t-test for both lemo and energy drink individually we could say that, we can't reject H0. So , we can't say that it is affected by drink type.
+# Task 4
+
+# Task 5
+
+# Task 6
+
+# OUr assumption for performing analysis in Exercise 3 was that the differences are taken from a random sample of normal distribution
+
+qqnorm(lemo_time_difference)
+qqline(lemo_time_difference)
+shapiro.test(lemo_time_difference)
+# p- value = 0.3725. Therefore, no reason to suspect that the assumption about differences are not taken from normal distribution
+
+qqnorm(energy_time_difference)
+qqline(energy_time_difference)
+shapiro.test(energy_time_difference)
+# p- value = 0.2788. Therefore,the differences are taken from normal distribution.
+
+# How would you transform this vector into 24 residuals to investigate this assumption in QQ-plots? Make this QQ-plot(s).

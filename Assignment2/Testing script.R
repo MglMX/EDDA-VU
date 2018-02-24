@@ -351,6 +351,7 @@ t.test(Run_lemo$before,Run_lemo$after,paired = TRUE)
 t.test(Run_energy$before,Run_lemo$after,paired = TRUE)
 #We cannot reject that the mean of the differences is 0. Therefore, we cannot say that the running speed is affected for the people who drink energy drink
 
+# Why you are doing the test with energy_before and lemo_after!
 
 #6.3
 
