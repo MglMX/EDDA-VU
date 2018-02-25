@@ -1,6 +1,6 @@
 ---
 title: "Assignment 2"
-author: "Tanjina Islam and Miguel Morales Expósito, group 12"
+author: "Tanjina Islam, Miguel Morales Expósito and Carlos Perales Liñan, group 12"
 date: "28 February 2018"
 output:
   pdf_document:
