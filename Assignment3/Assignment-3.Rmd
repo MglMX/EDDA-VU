@@ -1,0 +1,189 @@
+---
+title: "Assignment 3"
+author: "Tanjina Islam, Miguel Morales Expósito and Carlos Perales Liñan, group 12"
+date: "13 March 2018"
+output:
+  pdf_document:
+    fig_caption: yes
+fontsize: 11pt
+highlight: tango
+---
+
+## Exercise 1
+Exercise 1
+```{r}
+# Add Code
+```
+
+### ( 1 ) 
+Exercise 1: Task-1
+```{r}
+# Add Code
+```
+
+### ( 2 )
+Exercise 1: Task-2
+```{r}
+# Add Code
+```
+
+## Exercise 2
+Exercise 2
+```{r}
+# Add Code
+```
+
+### ( 1 ) 
+Exercise 2: Task-1
+```{r}
+# Add Code
+```
+
+### ( 2 )
+Exercise 2: Task-2
+```{r}
+# Add Code
+```
+
+
+### ( 3 ) 
+Exercise 2: Task-3
+```{r}
+# Add Code
+```
+
+### ( 4 )
+Exercise 2: Task-4
+```{r}
+# Add Code
+```
+
+## Exercise 3
+Exercise 3
+```{r}
+# Add Code
+```
+
+### ( 1 ) 
+Exercise 3: Task-1
+```{r}
+# Add Code
+```
+
+### ( 2 )
+Exercise 3: Task-2
+```{r}
+# Add Code
+```
+
+## Exercise 4
+Exercise 4
+```{r}
+# Add Code
+```
+
+### ( 1 ) 
+Exercise 4: Task-1
+```{r}
+# Add Code
+```
+
+### ( 2 )
+Exercise 4: Task-2
+```{r}
+# Add Code
+```
+
+### ( 3 )
+Exercise 4: Task-3
+```{r}
+# Add Code
+```
+
+## Exercise 5
+Exercise 5
+```{r}
+# Add Code
+```
+
+### ( 1 ) 
+Exercise 5: Task-1
+```{r}
+# Add Code
+```
+
+### ( 2 )
+Exercise 5: Task-2
+```{r}
+# Add Code
+```
+
+## Exercise 6
+Exercise 6
+```{r}
+# Add Code
+```
+
+### ( 1 ) 
+Exercise 6: Task-1
+```{r}
+# Add Code
+```
+
+### ( 2 )
+Exercise 6: Task-2
+```{r}
+# Add Code
+```
+
+
+### ( 3 ) 
+Exercise 6: Task-3
+```{r}
+# Add Code
+```
+
+### ( 4 )
+Exercise 6: Task-4
+```{r}
+# Add Code
+```
+
+### ( 5 ) 
+Exercise 6: Task-5
+```{r}
+# Add Code
+```
+
+### ( 6 )
+Exercise 6: Task-6
+```{r}
+# Add Code
+```
+
+## Exercise 7
+Exercise 7
+```{r}
+# Add Code
+```
+
+### ( 1 ) 
+Exercise 7: Task-1
+```{r}
+# Add Code
+```
+
+### ( 2 )
+Exercise 7: Task-2
+```{r}
+# Add Code
+```
+
+
+### ( 3 ) 
+Exercise 7: Task-3
+```{r}
+# Add Code
+```
+
+## Our Explanations/Findings : 
