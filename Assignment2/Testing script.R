@@ -21,7 +21,7 @@ bootstrap_exp<-function(n,lambda){
   return(tstar)
 }
 
-lambda_values=seq(0.01,0.1,length=100)
+lambda_values=seq(0.01,0.1,length=200)
 lambda_values
 
 p_array=numeric(length(lambda_values))
@@ -358,7 +358,8 @@ t.test(Run_energy$before,Run_lemo$after,paired = TRUE)
 differences_lemo = Run_lemo$before-Run_lemo$after
 differences_energy = Run_energy$before - Run_energy$after
 
-t.test(differences_lemo,differences_energy,paired=TRUE)
+t.test(differences_lemo,differences_energy)
+
 #We cannot reject that the mean of the diffences is 0. Therefore, we cannot say that the time differences are affected by the type of drink
 
 #6.4 Lecture 3 (24)
