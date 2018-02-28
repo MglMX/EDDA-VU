@@ -9,6 +9,9 @@ output:
 fontsize: 11pt
 highlight: tango
 ---
+```{r,echo=FALSE}
+options(digits = 3) #Showing only 3 decimals
+```
 
 ## Exercise 1
 ### Task 1
@@ -20,8 +23,6 @@ bills = Data$Bills;
 We define our t statistics which is going to be the median. 
 ```{r}
 t=median(bills);
-n=length(bills);
-
 ```
 
 We define the function for the bootstrap test for different lambda values.
@@ -40,6 +41,7 @@ We define 200 hundred values for lambda and perform the bootstrap test on each o
 ```{r}
 lambda_values=seq(0.01,0.1,length=200)
 p_array=numeric(length(lambda_values))
+n=length(bills);
 B=1000;
 i=1
 for(lambda in lambda_values){
@@ -71,6 +73,7 @@ We cannot reject that the data stems from a exponential distribution with lambda
 plot(lambda_values,p_array)
 ```
 
+Looking at the graph and the previous lambda values, we can estimate that the data stems from a exponential distribution with lambda values in the range [`r min(lambda_not_reject)`,`r max(lambda_not_reject)`].
 
 ### Task 2 
 
@@ -80,34 +83,29 @@ boxplot(bills)
 qqnorm(bills)
 ```
 
-Considering that the median of the data is `r median(bills)` the marketing manager could focus the marketing campaign saying that half of their customers spend less than `r median(bills)` euros every month.
+Considering that the median of the data is `r round(median(bills),digits=2)` the marketing manager could focus the marketing campaign saying that half of their customers spend less than `r round(median(bills),digits=2)` euros every month.
 
 ## Exercise 2
 We load the data and normalize it so the data represents the same from the different data sources
 ```{r}
 light1879 = scan("light1879.txt");
 light1882 = scan("light1882.txt")
-light_time = scan("light.txt") #Holds the times saved from the experiment which are NOT the seconds taken to travel 7442Km
+light_time = scan("light.txt") 
 
-light_real_time = ((light_time/1000)+24.8)/1000000 #Holds the real time taken to travel 7442Km in seconds
-light_speed = (7.442/light_real_time)-299000 #Measured speed of light minus 299000
+light_real_time = ((light_time/1000)+24.8)/1000000 
+light_speed = (7.442/light_real_time)-299000
 ```
 
 ### Taks 1 
-Exercise 2: Task-1
 ```{r}
 hist(light1879);
-boxplot(light1879);
 ```
 ```{r}
 hist(light1882);
-boxplot(light1882);
-
 ```
 
 ```{r}
 hist(light_speed);
-boxplot(light_speed);
 ```
 
 ```{r}
@@ -115,6 +113,7 @@ boxplot(light1879,light1882,light_speed,names=c("Light 1879","Light 1882","Light
 ```
 
 Comparing the histograms and boxplots we can see that the distribution of the light1882 and light_speed are quite similar. Meanwhile, the light1879 the boxplot seems shifted upwards which means that the values are bigger.
+
 If we consider the median values then we get for light1879 is `r median(light1879)`, for 1882 is `r median(light1882)` and light_speed is `r median(light_speed)`. We see again that light1882 and light_speed medians are close to each other.
 
 
@@ -152,49 +151,49 @@ get_confidence_intervals<-function(data,operation="mean"){
 }
 ```
 #### Light 1879
-Confidence interval for the mean
+
 ```{r}
 confidence_mean = get_confidence_intervals(light1879);
 confidence_mean = confidence_mean+299000; #We add 299000 to get the actual speed
 ```
-The confidence interval for the mean is `r confidence_mean`
+The confidence interval for the mean is [299836,299867]
 
-Confidence interval for the median
+
 ```{r}
 confidence_median = get_confidence_intervals(light1879,"median");
 confidence_median = confidence_median+299000;
 ```
-The confidence interval for the median is `r confidence_median`
+The confidence interval for the median is [299830,299860]
 
 #### Light 1882
-Confidence interval for the mean
+
 ```{r}
 confidence_mean = get_confidence_intervals(light1882);
 confidence_mean = confidence_mean+299000; #We add 299000 to get the actual speed
 ```
-The confidence interval for the mean is `r confidence_mean`
+The confidence interval for the mean is [299710,299797]
 
-Confidence interval for the median
+
 ```{r}
 confidence_median = get_confidence_intervals(light1882,"median");
 confidence_median = confidence_median+299000;
 ```
-The confidence interval for the median is `r confidence_median`
+The confidence interval for the median is [299751,299825]
 
 #### Light Newcomb
-Confidence interval for the mean
+
 ```{r}
 confidence_mean = get_confidence_intervals(light_speed);
 confidence_mean = confidence_mean+299000; #We add 299000 to get the actual speed
 ```
-The confidence interval for the mean is `r confidence_mean`
+The confidence interval for the mean is [299730,299790]
 
-Confidence interval for the median
+
 ```{r}
 confidence_median = get_confidence_intervals(light_speed,"median");
 confidence_median = confidence_median+299000;
 ```
-The confidence interval for the median is `r confidence_median`
+The confidence interval for the median is [299742,299766]
 
 ### Task 3
 Looking at the confidence intervals of light1882 and light Newcomb, we can find that they are similar and more or less are in the same range. Meanwhile, the confidence interval of 1879 is not in the same range as the other two for the mean and for the median. The intersection of the intervals of 1879 and the others is empty.
@@ -217,8 +216,10 @@ qqnorm(klm)
 qqline(klm)
 ```
 We check that the population does not seem normal. This tells us that doing the t-test is not the best option.
-We should perform the sign test.
 Wilcoxon test does not seem appropiate because the population is not symmetric.
+
+We should perform the sign test.
+
 ### Task 1
 We compute how many values are bigger than 31 and perform a binom test with that data.
 ```{r, results="hide"}
@@ -226,7 +227,8 @@ n_bigger = sum(klm>31)
 n = length(klm)
 binom.test(n_bigger,n,p=0.5,alternative = "greater")
 ```
-We obtain a p-value of `r binom.test(n_bigger,n,p=0.5,alternative = "greater")[[3]]` so we can reject the null hypothesis that the median of the population is smaller or equal than 31. 
+We obtain a p-value of `r binom.test(n_bigger,n,p=0.5,alternative = "greater")[[3]]` so we can reject the null hypothesis that the median of the population is smaller or equal than 31.
+
 ### Task 2
 We compute how many values are bigger than 72. We perform a binomial test with p = 0.1.
 ```{r, results="hide"}
@@ -250,7 +252,7 @@ differences=Clouds$seeded-Clouds$unseeded;
 qqnorm(differences);
 qqline(differences);
 ```
-It seems that it does not.
+It seems that it does not come from normal population.
 
 We perform the t-test.
 ```{r,results = "hide"}
@@ -260,20 +262,20 @@ The p-value `r t.test(Clouds$seeded,Clouds$unseeded,paired = TRUE)[[3]]` indicat
 
 ####  Mann-Whitney-Wilcoxon
 We perform the test.
-```{r,results="hide"}
+```{r,results="hide",warning=FALSE}
 wilcox.test(Clouds$seeded,Clouds$unseeded)
 ```
 The p-value `r wilcox.test(Clouds$seeded,Clouds$unseeded)[[3]]` indicates that the two samples come from different populations. Therefore, the nitrate has an effect.
 
 ####  Kolmogorov-Smirnov
 We perform the test.
-```{r,results="hide"}
+```{r,results="hide",warning=FALSE}
 ks.test(Clouds$seeded,Clouds$unseeded);
 ```
 The p-value `r ks.test(Clouds$seeded,Clouds$unseeded)[[2]]` indicates that the two samples come from different populations. Therefore, the nitrate has an effect.
 
 #### Findings
-The t-test seems appropiate becuase the data is paired but when we check the normality in the differences, it appears that the distribution is not normal so the t-test is doubtfull. Since the size of the sample is small maybe it could be the reason why the distribution does not seem normal.
+The t-test seems appropiate because the data is paired but when we check the normality in the differences, it appears that the distribution is not normal so the t-test is doubtful. Since the size of the sample is small, maybe it could be the reason why the distribution does not seem normal.
 
 Mann-Whitney and Kolmogorov-Smirnov do not seem appropiate because those test are ment to be use when the data is independent but they are not.
 
@@ -290,12 +292,12 @@ t.test(clouds_sq$seeded,clouds_sq$unseeded,paired = TRUE)
 ```
  The p-value `r t.test(clouds_sq$seeded,clouds_sq$unseeded,paired = TRUE)[[3]]` indicates that we can reject the null hypothesis.
  
-```{r}
+```{r,results="hide",warning=FALSE}
 wilcox.test(clouds_sq$seeded,clouds_sq$unseeded)
 ```
 The p-value `r wilcox.test(clouds_sq$seeded,clouds_sq$unseeded)[[3]]` indicates that we can reject the null hypothesis.
 
-```{r, results="hide"}
+```{r,results="hide",warning=FALSE}
 ks.test(clouds_sq$seeded,clouds_sq$unseeded)
 ```
 The p-value`r ks.test(clouds_sq$seeded,clouds_sq$unseeded)[[2]]` indicates that we can reject the null hypothesis.
@@ -319,12 +321,12 @@ t.test(clouds_sq_sq$seeded,clouds_sq_sq$unseeded,paired = TRUE)
 ```
 The p-value `r t.test(clouds_sq_sq$seeded,clouds_sq_sq$unseeded,paired = TRUE)[[3]]` indicates that we can reject the null hypothesis, H0.
 
-```{r, results="hide"}
+```{r,results="hide",warning=FALSE}
 wilcox.test(clouds_sq_sq$seeded,clouds_sq_sq$unseeded)
 ```
 The p-value `r wilcox.test(clouds_sq_sq$seeded,clouds_sq_sq$unseeded)[[3]]` indicates that we can reject our null hypothesis, Ho.
 
-```{r}
+```{r,results="hide",warning=FALSE}
 ks.test(clouds_sq_sq$seeded,clouds_sq_sq$unseeded)
 ```
 
@@ -332,7 +334,7 @@ The p-value `r ks.test(clouds_sq_sq$seeded,clouds_sq_sq$unseeded)[[2]]` indicate
 
 ### Findings :
 Applying square root to the square-rooted values of the samples, when we perform t-test we can see that again the p-value is being decreased.
-While on the other hand, in both Mann-whitney-wilcoxon test and Kolmorov-sminorv test p-value remains the same for the square rooted values.
+While on the other hand, in both Mann-Whitney-Wilcoxon test and Kolmorov-Sminorv test p-value remains the same for the square rooted values.
 
 ## Exercise 5
 We load the data from the data source.
@@ -348,9 +350,10 @@ We make the plot of each pair of two variables.
 pairs(peruvians)
 ```
 From this plot we can see that migration is probably correlated with age and weight because when the values of migration increase, then the values of age and weight also increase.
+
 ### Task 2
 
-First, we check the normality of variable migration.After finding the normality then we can decide which test should we perform for corelation checking.
+First, we check the normality of variable migration. After finding the normality, then we can decide which test should we perform for correlation checking.
 
 ```{r, echo=FALSE}
 
@@ -364,32 +367,32 @@ shapiro.test(migration)
 The shapiro test gives a p-value of `r shapiro.test(migration)[[3]]` which rejects the null hypothesis that the distribution is normal.
 From the above test result and from QQ-Plot, we found that migration does not belong to normal distribution. Therefore, we will use the rank correlation test of Spearman.
 
-```{r, results="hide"}
+```{r, results="hide",warning=FALSE}
 cor.test(migration, age, method = "spearman")
 ```
 The p-value `r cor.test(migration, age, method = "spearman")[[3]]` indicates that the null hypothesis that the correlation is 0 should be rejected. Therefore, migration and age are correlated.
 
-```{r, results="hide"}
+```{r, results="hide",warning=FALSE}
 cor.test(migration, weight, method = "spearman")
 ```
 The p-value `r cor.test(migration, weight, method = "spearman")[[3]]` indicates that the null hypothesis that the correlation is 0 should be rejected. Therefore, migration and weight are correlated.
 
-```{r, results="hide"}
+```{r, results="hide",warning=FALSE}
 cor.test(migration, length, method = "spearman")
 ```
 The p-value `r cor.test(migration, length, method = "spearman")[[3]]` indicates that  we cannot reject that the null hypothesis that the correlation is 0. Therefore, migration and length are not correlated.
 
-```{r, results="hide"}
+```{r, results="hide",warning=FALSE}
 cor.test(migration, wrist, method = "spearman")
 ```
 The p-value `r cor.test(migration, wrist, method = "spearman")[[3]]` indicates that  we cannot reject that the null hypothesis that the correlation is 0. Therefore, migration and heart rate are not correlated.
 
-```{r, results="hide"}
+```{r, results="hide",warning=FALSE}
 cor.test(migration, systolic, method = "spearman")
 ```
 The p-value `r cor.test(migration, systolic, method = "spearman")[[3]]` indicates that  we cannot reject that the null hypothesis that the correlation is 0. Therefore, migration and systolic are not correlated.
 
-```{r, results="hide"}
+```{r, results="hide",warning=FALSE}
 cor.test(migration, diastolic, method = "spearman")
 ```
 The p-value `r cor.test(migration, diastolic, method = "spearman")[[3]]` indicates that  we cannot reject that the null hypothesis that the correlation is 0. Therefore, migration and diastolic are not correlated.
@@ -403,31 +406,33 @@ attach(run)
 ```
 
 ### Task 1
-Here we show histogram and qqplot of the data before taking the drinks.
+Here we show histogram and QQ-plot of the data before taking the drinks.
 ```{r}
 
 hist(before)
 qqnorm(before)
 qqline(before) 
 ```
+The data seems a bit deviated from the normal distribution. 
 
-Followed by the same kind of plots of the data after taking the drinks.
+We generate the same kind of plots of the data after taking the drinks.
 ```{r}
 hist(after)
 qqnorm(after)
 qqline(after) 
 ```
+The QQ-plot shows data the data follows the normal distribution.
 
-Then we plot both data together in order to be able to see the differences.
+Then we plot both data together in order to be able to see if there is correlation.
 ```{r}
 
 plot(before, after, main = "Before Vs After")
 abline(lm(after~before), col="red")
 boxplot(before, after, names = c("before", "after"))
 ```
+It seems that there is correlation between the two data sets.
 
-
-Finally we plot the differences of the two datasets in a histogram and qqplot.
+Finally we plot the differences of the two datasets in a histogram and QQ-plot.
 
 ```{r}
 
@@ -437,6 +442,7 @@ qqline(before-after)
 boxplot(before-after, names = "before - after")
 ```
 
+The histogram and QQ-plot show that the data probably comes form the normal distribution.
 
 ### Task 2
 Since t-test runs under the assumption that the differences of the samples come from a normal distribution, we check the normality using the shapiro test.
@@ -446,17 +452,21 @@ shapiro.test(before-after)
 ```
 The test proves the assumption that the difference is normal.
 
-Now we test the data before having the soft drink with the one after.
-```{r,results="hide"}
+We assign the different times to new variables for the soft drink and energy drink.
+```{r}
 lemo = run[which(drink == "lemo"),]
 energy = run[which(drink == "energy"),]
-t.test(lemo$before, lemo$after, paired = TRUE) 
+```
 
+
+Now, we test the data before having the soft drink with the one after.
+```{r,results="hide"}
+t.test(lemo$before, lemo$after, paired = TRUE) 
 ```
 Having the p-value `r t.test(lemo$before, lemo$after, paired = TRUE)[[3]]` we cannot reject that the mean of the differences is 0. Therefore, we can conclude the soft drinks do not affect the runners.
 
 Now we do the same test for the energy drinks.
-```{r}
+```{rresults="hide"}
 t.test(energy$before, energy$after, paired = TRUE)
 ```
 
@@ -467,7 +477,7 @@ Having the p-value `r t.test(energy$before, energy$after, paired = TRUE)[[3]]` w
 ### Task 3
 
 Now we test individually if the time differences are affected by the drink type.
-```{r}
+```{r,results="hide"}
 lemo_time_difference = lemo$before - lemo$after
 
 energy_time_difference = energy$before - energy$after
@@ -479,7 +489,7 @@ Having the p-value `r t.test(lemo_time_difference, energy_time_difference)[[3]]`
 
 ### Task 4
 
-A possible objection could be that the time taken between the two runs are not enough. According to http://www.sciencefocus.com/article/human-body/how-long-does-caffeine-take-kick, caffeine takes around 45 minutes to kick in. So maybe half an hour was not enough to see the effects of the drinks in the running speed.
+A possible objection could be that the time taken between the two runs are not enough. According to http://www.sciencefocus.com/article/human-body/how-long-does-caffeine-take-kick, caffeine takes around 45 minutes to kick in. So, maybe half an hour was not enough to see the effects of the drinks in the running speed.
 
 
 ### Task 5 
@@ -490,7 +500,7 @@ Our possible objection could be that 30 minutes is not enough time to rest and d
 ### Task 6
 The test assumes that the distribution of the differences is normal.
 
-Here we show the qqplots for the ttme difference for the soft drinks and the energy drinks.
+Here we show the QQ-plots for the time difference for the soft drink and the energy drink.
 ```{r}
 qqnorm(lemo_time_difference)
 qqline(lemo_time_difference)
@@ -511,13 +521,13 @@ attach(dogs)
 
 ### Task 1 
 
-First of all we start with boxplots of all the different drugs on the population.
+First of all, we start with boxplots of all the different drugs on the population.
 ```{r}
 boxplot(dogs, names = c("Isofluorane", "Halothane", "Cyclopropane") )
 
 ```
 
-Then we check the normality on the distributions of each drug. Showing the qqplots first and then performing the shapiro test.
+Then we check the normality on the distributions of each drug. Showing the QQ-plots first and then performing the shapiro test.
 
 ```{r}
 qqnorm(isofluorane, main= "Q-Q Plot of Isofluorane" )
@@ -560,9 +570,9 @@ anova(dog_aov)
 
 summary(dog_aov)
 ```
-Having the p-value from the anova test being `r anova(dog_aov)[[5]]` we can reject that mu1 = mu2 = mu3. Therefore, the concentration is not the same under the different drugs.
+Having the p-value from the anova test being `r anova(dog_aov)[[5]]` we can reject that mu0 = mu1 = mu2. Therefore, the concentration is not the same under the different drugs.
 
-The estimate for Isofluorane is`r summary(dog_aov)[[4]][[1]]` the estimate for Halothane is `r summary(dog_aov)[[4]][[1]] + summary(dog_aov)[[4]][[2]]` and the estimate for Cyclopropane is `r summary(dog_aov)[[4]][[1]] + summary(dog_aov)[[4]][[3]]`.
+running the summary(dog_aov) test, we get that the estimate for Isofluorane is `r summary(dog_aov)[[4]][[1]]` the estimate for Halothane is `r summary(dog_aov)[[4]][[1]] + summary(dog_aov)[[4]][[2]]` and the estimate for Cyclopropane is `r summary(dog_aov)[[4]][[1]] + summary(dog_aov)[[4]][[3]]`.
 
 
 ### Task 3
@@ -572,4 +582,6 @@ attach(dogframe)
 kruskal.test(plasma, group)
 ```
 
-The test gives us the p-value `r kruskal.test(plasma, group)[[3]]`. Which indicates that we cannot reject that m0 = m1 = m2. So we can say it differs from the conclussion from the anova test.
+The test gives us the p-value `r kruskal.test(plasma, group)[[3]]`. Which indicates that we cannot reject that m0 = m1 = m2. 
+
+So we can say the results of this test differ from the conclussion made after the anova test.
