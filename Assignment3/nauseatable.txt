@@ -1,0 +1,4 @@
+"Incidence of no nausea" "Incidence of Nausea"
+"Chlorpromazine" 100 52
+"Pentobarbital(100mg)" 32 35
+"Pentobarbital(150mg)" 48 37
