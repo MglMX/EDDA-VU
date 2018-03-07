@@ -46,8 +46,8 @@ qqnorm(residuals(breadaov2))
 qqline(residuals(breadaov2))
 plot(fitted(breadaov2),residuals(breadaov2))
 
-#qq datos en los extremos son demasiado extremos outliers
-#plot todo datos similares y algun outlier en el 200
+#The normality according to the qq-plot could be doubtful because of the extreme values.
+#In the plot we see that the values don't change systematically. We can see some outliers between 200 and 300.
 
 
 ###EXERCISE 2
@@ -62,10 +62,21 @@ attach(search)
 
 
 ##T2
+interaction.plot(skill,interface,time)
+interaction.plot(interface,skill,time)
 
-
+#The lines seems unparallel which indicates that there might be interaction
 
 ##T3
+
+search$skill = as.factor(search$skill)
+search$interface = as.factor(search$interface)
+
+searchaov = lm(time~interface,data=search)
+anova(searchaov)
+
+#H0 mu0=mu1=mu2=mu3=mu4 cannot be rejected.
+#I used 1 way anova because searchaov = lm(time~interface*skill,data=search) was not returning p-value.
 
 
 ##T4
