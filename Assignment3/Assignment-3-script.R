@@ -1,4 +1,6 @@
-###EXERCISE 1
+library(multcomp)
+library(lme4)
+ ###EXERCISE 1
 
 ##T1
 
@@ -26,8 +28,9 @@ bread$environment=as.factor(bread$environment)
 breadaov=lm(hours~humidity*environment,data=bread)
 anova(breadaov)
 
-#environment y humidity tienen main effect y hay evidencias de interaccion. 
-#porque p value es muy pequeño y h0 es que no hay interaccion.
+#Environment and humidity have main effect according to the p-value. 
+#Looking at the p-value of humidity:environment we see that there is interaction between the two factors
+
 
 
 ##T4
