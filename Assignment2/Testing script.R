@@ -424,3 +424,50 @@ kruskal.test(plasma,anesthesia)
 
 #With a p-value of 0.06 we cannot (?) reject the null hypothesis mu1=mu2=mu3. 
 #In previous example we could reject the hypothesis but not in this one
+
+
+### Task 2
+
+First, we check the normality of variable migration.After finding the normality then we can decide which test should we perform for corelation checking.
+
+```{r, echo=FALSE}
+
+qqnorm(migration, main = "QQ - Plot of Migration")
+
+```
+```{r, results="hide"}
+
+shapiro.test(migration)
+```
+The shapiro test gives a p-value of `r shapiro.test(migration)[[3]]` which rejects the null hypothesis that the distribution is normal.
+From the above test result and from QQ-Plot, we found that migration does not belong to normal distribution. Therefore, we will use the rank correlation test of Spearman.
+
+```{r, results="hide"}
+cor.test(migration, age, method = "spearman")
+```
+The p-value `r cor.test(migration, age, method = "spearman")[[3]]` indicates that the null hypothesis that the correlation is 0 should be rejected. Therefore, migration and age are correlated.
+
+```{r, results="hide"}
+cor.test(migration, weight, method = "spearman")
+```
+The p-value `r cor.test(migration, weight, method = "spearman")[[3]]` indicates that the null hypothesis that the correlation is 0 should be rejected. Therefore, migration and weight are correlated.
+
+```{r, results="hide"}
+cor.test(migration, length, method = "spearman")
+```
+The p-value `r cor.test(migration, length, method = "spearman")[[3]]` indicates that  we cannot reject that the null hypothesis that the correlation is 0. Therefore, migration and length are not correlated.
+
+```{r, results="hide"}
+cor.test(migration, wrist, method = "spearman")
+```
+The p-value `r cor.test(migration, wrist, method = "spearman")[[3]]` indicates that  we cannot reject that the null hypothesis that the correlation is 0. Therefore, migration and heart rate are not correlated.
+
+```{r, results="hide"}
+cor.test(migration, systolic, method = "spearman")
+```
+The p-value `r cor.test(migration, systolic, method = "spearman")[[3]]` indicates that  we cannot reject that the null hypothesis that the correlation is 0. Therefore, migration and systolic are not correlated.
+
+```{r, results="hide"}
+cor.test(migration, diastolic, method = "spearman")
+```
+The p-value `r cor.test(migration, diastolic, method = "spearman")[[3]]` indicates that  we cannot reject that the null hypothesis that the correlation is 0. Therefore, migration and diastolic are not correlated.
