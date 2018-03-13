@@ -6,10 +6,11 @@ bread = read.table("bread.txt", header=TRUE)
 attach(bread)
 
 N=3
-I=3
-J=2
+I=2
+B=3
 
-rbind(rep(1:I,each=N*J),rep(1:J,N*I),sample(1:(N*I*J)))
+for (i in 1:B) print(sample(1:(N*I)))
+
 
 ##T2
 
