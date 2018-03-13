@@ -11,6 +11,7 @@ B=3
 
 for (i in 1:B) print(sample(1:(N*I)))
 
+#This way we can see hwo to assign to the slices of bread the different combinations number from 1 to 6. 
 
 ##T2
 
