@@ -74,7 +74,7 @@ summary(crimelm)
 
 crimelm=lm(expend~employ+lawyers,data=expcrime) #R2: 0.9632
 summary(crimelm)
-#total = -1.107e+02 + 12.971e-02*employ + 2.686e-02*lawyers + error
+#total = -1.107e+02 + 2.971e-02*employ + 2.686e-02*lawyers + error
 
 
 ###STEP-DOWN method
@@ -112,11 +112,11 @@ summary(crimelm)
 #All p-values<0.05 = all variables are significant
 
 
-###The resulting model of the step-up method is
+###The resulting model of the step-down method is
 
 crimelm=lm(expend~employ+lawyers,data=expcrime)
 summary(crimelm)
-#total = -1.107e+02 + 12.971e-02*employ + 2.686e-02*lawyers + error
+#expend = -1.107e+02 + 2.971e-02*employ + 2.686e-02*lawyers + error
 
 #WE GET THE SAME MODEL USING BOTH METHODS
 

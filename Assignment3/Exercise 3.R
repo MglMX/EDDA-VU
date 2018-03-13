@@ -53,3 +53,6 @@ summary(creamaov)
 confint(creammult) # For starter
 
 # I don't know yet how to interpret the findings!
+
+# The intervals[1.3208,4.2992], [1.4708, 4.4492], [2.3008, 5.2792] and [-4.7832, -1.8048] for the differences alpha4 - alpha1, alpha4 - alpha2, alpha4 - alpha3 and alpha5 - alpha4
+# do not contain number 0.  
