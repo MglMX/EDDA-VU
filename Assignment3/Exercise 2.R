@@ -4,12 +4,15 @@ attach(search)
 ##T1
 
 N=1
-I=5
-B=3
+I=3
+B=5
 
-for (i in 1:B) print(sample(1:(N*I)))
-#gotta do the randomization again but still don't get how that works 
-#like in the last exercise
+for (i in 1:B){
+  print(sample(1:(N*I)))
+} 
+#The first student of level 1 will use the itnerface 2, the second one will use interface 1 and the third one interface 3.
+#For the students of level 3, first student will use interface 3, 2nd student will use interface 1 and third student interface 2,
+#And so on.
 
 
 
@@ -54,7 +57,7 @@ qqline(residuals(searchaov2))
 
 plot(fitted(searchaov2),residuals(searchaov2))
 
-#We see that the residuals don't change systematically with the fitted values.
+#We see that the doesn't change systematically with the fitted values.
 #So we can assume that the population comes from where the data comes from has equal variances.
 
 ##T6
