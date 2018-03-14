@@ -24,33 +24,33 @@ nonausea
 nausea_vector = c(nonausea, nausea)
 nausea_vector
 
-Chlorpromazine_nonausea = as.vector(rep("C", 100))
-Chlorpromazine_nonausea
+label_medicin <- function(label, count){
+  
+   med_label <- as.vector(rep(label, count))
+   
+   return(med_label)
+  
+}
 
-Pentobarbital_nonausea_1 = as.vector(rep("P1", 32))
-Pentobarbital_nonausea_1
+# Total count of medicines for No nausea
+C_nonausea = 100
+P1_nonausea = 32
+P2_nonausea = 48
 
-Pentobarbital_nonausea_2 = as.vector(rep("P2", 48))
-Pentobarbital_nonausea_2
+# Total count of medicines for Nausea
+C_nausea =  52
+P1_nausea = 35
+P2_nausea = 37
 
-Chlorpromazine_nausea = as.vector(rep("C", 52))
-Chlorpromazine_nausea
 
-Pentobarbital_nausea_1 = as.vector(rep("P1", 35))
-Pentobarbital_nausea_1
-
-Pentobarbital_nausea_2 = as.vector(rep("P2", 37))
-Pentobarbital_nausea_2
-
-medicin_vector = c(Chlorpromazine_nonausea, Pentobarbital_nonausea_1, Pentobarbital_nonausea_2, Chlorpromazine_nausea, Pentobarbital_nausea_1, Pentobarbital_nausea_2)
+medicin_vector = c(label_medicin("C", C_nonausea), label_medicin("P1", P1_nonausea), label_medicin("P2", P2_nonausea), label_medicin("C", C_nausea), label_medicin("P1", P1_nausea), label_medicin("P2", P2_nausea))
 medicin_vector
 
 
-# medicin = as.vector(rep(1:2, each = 152)) # I have no idea about how to define medicin labels!!
-# medicin
-
 nausea.frame = data.frame(nausea_vector, medicin_vector)
-# nausea.frame If I try to print all data from that frame I'm getting more than 304 rows why??
+
+# We assigned labels "C" for Chlorpromazine, "P1" for Pentobarbital(100mg) and "P2" for Pentobarbital(150mg). 
+# We could have assigned same label for both doses of Pentobarbital. But we want to be specific so we used different labels for each one.
 
 nausea.frame
 # head(nausea.frame)
@@ -100,3 +100,4 @@ chisq.test(xtabs(~medicin_vector+nausea_vector, data = nausea.frame))[[1]]
 
 ## If we look at the p-values for both permutation test and chisq test we can seee that,
 ## for both of the tests we have same p-values that is 0.03
+
