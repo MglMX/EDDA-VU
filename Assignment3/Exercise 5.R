@@ -8,12 +8,8 @@ attach(nauseadata)
 nauseadata
 
 nonausea_detected = nauseadata[, 1]
-nonausea_detected
 
 nausea_detected = nauseadata[, 2]
-
-#nausea = as.vector(rep(0:1, 152)) # 304 or 152 or ??
-nausea_detected
 
 nausea = as.vector(rep(1, each = nausea_detected[1]+nausea_detected[2]+nausea_detected[3]))
 nausea
@@ -60,44 +56,44 @@ nausea.frame
 ##T2
 xtabs(~medicin_vector+nausea_vector, data = nausea.frame)
 
-
+#With xtabs we get a contingency table from the medicin and nausea factors.
+#We can see that there are more people suffering from nausea with the medicin Chlorpromazine than with Pentobarbital.
 # In this case R does not give the warning, since the approximation is reliable for
 # nausea_vector and medicin_vector in nausea.frame
 
 ##T3
 # Check Lecture 5 page : 1-12
 
-mystat = function(x) sum(residuals(x)^2)
 B = 1000
 tstar =  numeric(B)
 for (b in 1:B) {
  medicinstar = sample(medicin_vector)  # Permutting the medicin labels
- tstar[b] = mystat(lm(nausea_vector~medicinstar))
+ tstar[b] = chisq.test(xtabs(~medicinstar+nausea_vector, data = nausea.frame))[[1]] #Using the statistics mentioned in the exercise
 }
 
-myt = mystat(lm(nausea_vector~medicin_vector))
+
+myt = chisq.test(xtabs(~medicin_vector+nausea_vector, data = nausea.frame))[[1]]
 
 hist(tstar)
-myt # value = 71.82106
+myt # value = 6.62
 
 pl = sum(tstar<myt)/B
-pl # p-value = 0.032
+pl 
 pr = sum(tstar>myt)/B
-pr # p-value = 0.967
-2*pl # 2*p-value = 0.064
+pr
 
-chisq.test(xtabs(~medicin_vector+nausea_vector, data = nausea.frame))
+pmin = min(pl,pr)
+2*pmin # 2*p-value = 0.06
 
-# p-value = 0.03643
 
-chisq.test(xtabs(~medicin_vector+nausea_vector, data = nausea.frame))[[1]]
-
-# x-squared = 6.624765
-
-### Findings: I don't know what should we say/conclude here for this task!
+### Findings: According to the p-value we cannot reject that the two medicins have a significant difference. 
+# Therefore, we can say that they work equally well for the nausea.
 
 ##T4
+pvalue_chisq = chisq.test(xtabs(~medicin_vector+nausea_vector, data = nausea.frame))[[3]]
+pvalue_chisq
 
-## If we look at the p-values for both permutation test and chisq test we can seee that,
-## for both of the tests we have same p-values that is 0.03
+pvalue_tstar=2*pmin
+pvalue_tstar
+## we can see that we obtain two different p-values. 
 
