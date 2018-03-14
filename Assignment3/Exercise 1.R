@@ -28,8 +28,13 @@ bread$environment=as.factor(bread$environment)
 breadaov=lm(hours~humidity*environment,data=bread)
 anova(breadaov)
 
+anova(breadaov)[[5]][1] #p-value humidity
+anova(breadaov)[[5]][2] #p-value environment
+anova(breadaov)[[5]][3] #p-value humidity:environment
+
 #Environment and humidity have main effect according to the p-value. 
-#Looking at the p-value of humidity:environment we see that there is interaction between the two factors
+#Looking at the p-value of humidity:environment we see that there is interaction between the two factors.
+#So it means that the hours it takes to get the bread to decay is influence by the combination of this two factor and its combinations.
 
 
 
@@ -39,6 +44,7 @@ contrasts(bread$humidity)=contr.sum
 contrasts(bread$environment)=contr.sum
 breadaov2=lm(hours~humidity*environment,data=bread)
 summary(breadaov2)
+
 
 ##T5
 
