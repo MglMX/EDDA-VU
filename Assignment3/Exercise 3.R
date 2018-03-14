@@ -36,6 +36,8 @@ summary(creamaov)
 creammult =glht(creamaov,linfct=mcp(starter="Tukey")) # For starter
 summary(creammult)
 
+
+
 creammult2 =glht(creamaov,linfct=mcp(batch="Tukey")) # Not asked in exercise just to know
 summary(creammult2)
 
@@ -43,16 +45,25 @@ creammult3 =glht(creamaov,linfct=mcp(position="Tukey")) # Not asked in exercise 
 summary(creammult3)
 
 # Findings : Check lecture 6 page : 3 - 8
+# The p-values less than 0.05 are: 4 -1 == 0, 4 - 2 == 0, 4 - 3 == 0, 5 - 4 == 0.
+#The starter that leads to significant different acidity is number 4.
 
 ##T3
 summary(creamaov)
+
+#I cannot find H0 alpha2 == alpha 1
 
 # Findings : Check lecture 6 page : 3 - 8
 
 ##T4
 confint(creammult) # For starter
 
-# I don't know yet how to interpret the findings!
+# The intervals
+# 4 - 1 == 0  [1.3198,4.3002]
+# 4 - 2 == 0  [1.4698 ,4.4502]
+# 4 - 3 == 0  [2.2998,5.2802]
+# 5 - 4 == 0 [-4.7842 -1.8038]
 
-# The intervals[1.3208,4.2992], [1.4708, 4.4492], [2.3008, 5.2792] and [-4.7832, -1.8048] for the differences alpha4 - alpha1, alpha4 - alpha2, alpha4 - alpha3 and alpha5 - alpha4
-# do not contain number 0.  
+# Do not contain 0.   
+#This indicates that starter 4 has a main effect compared to the rest of starters.
+
