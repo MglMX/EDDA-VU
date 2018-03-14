@@ -10,281 +10,74 @@ highlight: tango
 ---
 ```{r,echo=FALSE}
 options(digits = 3) #Showing only 3 decimals
-```
-
-## Exercise 1
-We load the data from the data source
-```{r}
-bread = read.table("bread.txt", header=TRUE)
-attach(bread)
-```
-
-### Task 1 MISSING!
-
-```{r}
-# Add Code
-```
-
-### Task 2
-
-```{r}
-boxplot(hours~environment,data=bread)
-boxplot(hours~humidity,data=bread)
-
-interaction.plot(humidity,environment,hours)
-interaction.plot(environment,humidity,hours)
-```
-
-### Task 3
-
-```{r}
-# Add Code
-```
-
-### Task 4
-
-```{r}
-# Add Code
-```
-
-### Task 5
-
-```{r}
-# Add Code
-```
-
-## Exercise 2
-Exercise 2
-```{r}
-search=read.table("search.txt",header = TRUE);
-attach(search)
-```
-
-### Task 1 MISSING!
-
-```{r}
-# Add Code
-```
-
-### Task 2
-
-```{r}
-interaction.plot(skill,interface,time)
-interaction.plot(interface,skill,time)
-```
-
-The lines do not seem parallel. Therefore, we can say that there is interaction between interface and skill.
-
-### Task 3
-We consider the variables as factors because they are numbers. Then, we perform a 2-way anova test.
-```{r,results="hide"}
-search$skill = as.factor(search$skill)
-search$interface = as.factor(search$interface)
-
-searchaov = lm(time~interface+skill,data=search)
-anova(searchaov)
-```
-We get a p-value for interface of `r anova(searchaov)[[5]][1]`. Which indicates that we can reject that the mean of the interfaces are the same.
-### Task 4
-We load the library multcom in order to be able to make multiple comparison. Then we perform the analysis.
-
-```{r,results="hide"}
 library(multcomp)
-searchaov2 = lm(time~interface+skill,data=search)
-
-searchmult = glht(searchaov2,linfct=mcp(skill="Tukey"))
-summary(searchmult)
-```
-According to the test 4 - 3 == 0 has an estimate of 2.267.
-That's the estimate time for a user of skill 4 with the interface 3.
-### Task 5
-
-```{r}
-qqnorm(residuals(searchaov2))
-qqline(residuals(searchaov2))
-```
-The QQ-plot seems a bit deviated in the extremes but it could be normal.
-```{r}
-plot(fitted(searchaov2),residuals(searchaov2))
-```
-
-We see that the residuals don't change systematically with the fitted values.
-So we can assume that the populations have equal variances.
-### Task 6
-
-We perform the Friedman test.
-```{r}
-friedman.test(search$time,search$interface,search$skill)
-```
-We reject H0 (Interface doesn't have an effect) so we can say that the interface makes an effect.
-
-### Task 7
-we perform the one-way anova test.
-
-```{r,result="hide"}
-search$interface = as.factor(search$interface)
-
-searchaov = lm(time~interface,data=search)
-
-anova(searchaov)
-```
-
-We get p-value of `ranova(searchaov)[[5]][1]` so we cannot reject that the means are the same for the different interfaces.
-It is not useful because the variable skill should also be considered since according to the interaction plots there is interaction between skill and interface.
-
-1-way-anova assumes that the data come from normal population and the variances are equal
-```{r}
-qqnorm(residuals(searchaov))
-qqline(residuals(searchaov))
-```
-The population doesn't seem normal therefore the assumption is not met.
-
-## Exercise 3
-Exercise 3
-```{r}
-# Add Code
-```
-
-### Task 1
-
-```{r}
-# Add Code
-```
-
-### Task 2
-
-```{r}
-# Add Code
-```
-
-### Task 3
-
-```{r}
-# Add Code
-```
-
-### Task 4
-
-```{r}
-# Add Code
+library(lme4)
 ```
 
 ## Exercise 4
-Exercise 4
-```{r}
-# Add Code
+
+First, we load the data from the data source.
+```{r, results='hide'}
+cows = read.table("cow.txt", header = TRUE)
 ```
 
 ### Task 1
 
-```{r}
-# Add Code
+```{r, results='hide'}
+cows$id=factor(cows$id)
+cows$per=factor(cows$per)
+cowslm=lm(milk~treatment+per+id,data=cows)
+
 ```
+```{r}
+summary(cowslm)[[4]]
+```
+
+
+As we can see in the p-values [`r summary(cowslm)[[4]][[35]]`] of the treatment, we can see that it is higher than 0.05. Thus, we cannot reject the hypothesis that treatment doesn't have any main effect on milk production.
+
+
 
 ### Task 2
 
-```{r}
-# Add Code
+```{r, results='hide'}
+milkdif =glht(cowslm,linfct=mcp(treatment="Tukey")) 
 ```
+We can see that the estimate of B-A is [`r summary(milkdif)[[10]][[3]][[1]]`]. In addition to this, we see thatthe p-value is [`r summary(milkdif)[[10]][[6]][[1]]`].
+
+With this, we can't reject that the difference in milk production with treatment A is equal to the one using treatment B.
+
 
 ### Task 3
 
-```{r}
-# Add Code
+#### Checking influence in milk production
+
+```{r, results='hide'}
+cowslmer=lmer(milk~treatment+order+per+(1|id),data=cows,REML=FALSE)
+cowslmer1=lmer(milk~order+per+(1|id),data=cows,REML=FALSE)
+anova(cowslmer1,cowslmer)
+
 ```
+As we can see in the p-values [`r anova(cowslmer1,cowslmer)[[8]][2]`] of the tratment, we can see that it is higher than 0.05. Thus, we cannot reject the hypothesis that treatment doesn't have any main effect on milk production.
+
+#### Estimating the difference
+
+```{r, results='hide'}
+milkdiflmer =glht(cowslmer,linfct=mcp(treatment="Tukey")) 
+```
+We can see that the estimate of B-A is [`r summary(milkdiflmer)[[10]][[3]][[1]]`]. In addition to this, we see that the p-value is [`r summary(milkdiflmer)[[10]][[6]][[1]]`].
+
+With this, we can't reject that the difference in milk production with treatment A is equal to the one using treatment B.
+
 
 ### Task 4
 
-```{r}
-# Add Code
+The following command performs a t-test of the milk production using treatment a and milk production using treatment B. The test will help us say if the difference between these is 0 or not.
+
+```{r, results='hide'}
+attach(cows)
+t.test(milk[treatment=="A"],milk[treatment=="B"],paired=TRUE)
 ```
+The t-test gives back the p-value [`r t.test(milk[treatment=="A"],milk[treatment=="B"],paired=TRUE)[[3]]`]. With this, we can't reject that the difference is = to 0.
 
-## Exercise 5
-Exercise 5
-```{r}
-# Add Code
-```
-### Task 1
-
-```{r}
-# Add Code
-```
-
-### Task 2
-
-```{r}
-# Add Code
-```
-
-### Task 3
-
-```{r}
-# Add Code
-```
-
-### Task 4
-
-```{r}
-# Add Code
-```
-
-## Exercise 6
-Exercise 6
-```{r}
-# Add Code
-```
-
-### Task 1
-
-```{r}
-# Add Code
-```
-
-### Task 2
-
-```{r}
-# Add Code
-```
-
-### Task 3
-
-```{r}
-# Add Code
-```
-
-### Task 4
-
-```{r}
-# Add Code
-```
-
-### Task 5
-
-```{r}
-# Add Code
-```
-
-## Exercise 7
-Exercise 7
-```{r}
-# Add Code
-```
-
-### Task a
-
-```{r}
-# Add Code
-```
-
-### Task b
-
-```{r}
-# Add Code
-```
-
-### Task c
-
-```{r}
-# Add Code
-```
-
+This test does agree with the conclussion in task 1, where we concluded that the feeding treatment didn't have main influence in the milk production. Which is similar to saying that the difference of the means of milk production between both treatments is 0. Thus, we believe the test is valid to come to the same result
