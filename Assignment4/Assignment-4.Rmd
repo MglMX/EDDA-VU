@@ -1,0 +1,259 @@
+
+---
+title: "Assignment 4"
+author: "Tanjina Islam, Miguel Morales Expósito and Carlos Perales Liñan, group 12"
+date: "22 March 2018"
+output:
+  pdf_document:
+    fig_caption: yes
+fontsize: 11pt
+highlight: tango
+---
+```{r,echo=FALSE, warning=FALSE,results='hide',message=FALSE}
+options(digits = 3) #Showing only 3 decimals
+library(multcomp)
+library(lme4)
+```
+
+
+## Exercise 2
+
+We load the data from the data source.
+```{r}
+
+```
+
+### Task 1 
+
+
+
+```{r}
+
+
+```
+
+#### Findings: 
+
+### Task 2
+
+```{r}
+
+
+```
+
+#### Findings: 
+
+### Task 3
+
+```{r}
+
+
+```
+
+#### Findings: 
+
+### Task 4
+
+```{r}
+
+
+```
+
+#### Findings: 
+
+
+### Task 5
+
+```{r}
+
+
+```
+
+#### Findings: 
+
+### Task 6
+
+```{r}
+
+
+```
+
+#### Findings: 
+
+### Task 7
+
+```{r}
+
+
+```
+
+#### Findings: 
+
+### Task 8
+
+```{r}
+
+
+```
+
+#### Findings: 
+
+### Task 9
+
+```{r}
+
+
+```
+
+#### Findings: 
+
+### Task 10
+
+```{r}
+
+
+```
+
+#### Findings: 
+
+
+## Exercise 1
+
+We load the data from the data source.
+```{r}
+
+```
+
+### Task 1 
+
+
+
+```{r}
+
+
+```
+
+#### Findings: 
+
+### Task 2
+
+```{r}
+
+
+```
+
+#### Findings: 
+
+### Task 3
+
+```{r}
+
+
+```
+
+#### Findings: 
+
+### Task 4
+
+```{r}
+
+
+```
+
+#### Findings: 
+
+
+### Task 5
+
+```{r}
+
+
+```
+
+#### Findings: 
+
+### Task 6
+
+```{r}
+
+
+```
+
+#### Findings: 
+
+### Task 7
+
+```{r}
+
+
+```
+
+#### Findings: 
+
+### Task 8
+
+```{r}
+
+
+```
+
+#### Findings: 
+
+
+## Exercise 3
+
+We load the data from the data source.
+```{r}
+
+```
+
+### Task 1 
+
+
+
+```{r}
+
+
+```
+
+#### Findings: 
+
+### Task 2
+
+```{r}
+
+
+```
+
+#### Findings: 
+
+### Task 3
+
+```{r}
+
+
+```
+
+#### Findings: 
+
+### Task 4
+
+```{r}
+
+
+```
+
+#### Findings: 
+
+
+### Task 5
+
+```{r}
+
+
+```
+
+#### Findings: 
+
+
+
