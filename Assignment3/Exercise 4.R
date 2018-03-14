@@ -30,7 +30,7 @@ summary(cowslm)
 
 cowsanova=lm(milk~id+per+treatment,data=cows)
 anova(cowsanova) # IDK whether we should include it or not! Check lec 7 slide:12
-
+consider yhis
 ##T2
 
 # Estimates of treatment B = -0.5100

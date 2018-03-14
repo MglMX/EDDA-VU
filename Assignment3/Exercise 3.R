@@ -49,6 +49,7 @@ summary(creammult3)
 #The starter that leads to significant different acidity is number 4.
 
 ##T3
+creamaov = lm(acidity~starter+batch+position, data = cream)
 summary(creamaov)
 
 #I cannot find H0 alpha2 == alpha 1

@@ -8,7 +8,7 @@ output:
 fontsize: 11pt
 highlight: tango
 ---
-```{r,echo=FALSE}
+```{r,echo=FALSE, warning=FALSE,results='hide',message=FALSE}
 options(digits = 3) #Showing only 3 decimals
 library(multcomp)
 library(lme4)
@@ -25,17 +25,18 @@ attach(bread)
 
 ### Task 1 
 
-For the randomization task, we define the variables N (the dependent variable), I (the treatment) and B (the block). Then we perform the randomization.
+For the randomization task, we define the variables N (the number of units for each combination), I (the levels of humidity) and J (the levels of environment). Then we perform the randomization.
 
 ```{r}
 N=3
 I=2
-B=3
+J=3
 
-for (i in 1:B) print(sample(1:(N*I)))
+rbind(rep(1:I, each = N*J), rep(1:J, N*I), sample(1:(N*I*J)))
 
 ```
-This way we can see how to assign to the slices of bread to the different combinations of treatments number from 1 to 6. 
+
+This way we can randomoly assign slices of bread to the different combination of the two factors.
 
 ### Task 2
 
@@ -64,9 +65,9 @@ anova(breadaov)
 
 ```
 
-We can see that environment and humidity have a main effect according to their p-values 2.46e-10 and 4.32e-06respectively. 
+We can see that environment and humidity have a main effect according to their p-values 2.46e-10 and 4.32e-06 respectively. 
 
-Looking at the p-value of humidity:environment 3.71e-07, we see that there is interaction between the two factors.
+Looking at the p-value of humidity:environment = 3.71e-07, we see that there is interaction between the two factors.
 
 In summary, this means that the hours it takes to get the bread to decay is influenced by the combination of this two factors and its combinations.
 
@@ -125,7 +126,7 @@ for (i in 1:B){
 ```
 The rows in the matrix represent the skill level of the students. Row 1 is level 1, row 2 is level 2, etc.
 
-The first student of level 1 will use the interface 2, the second one will use interface 1 and the third one interface 3. For the students of level 3, first student will use interface 3, 2nd student will use interface 1 and third student interface 2...and so on.
+Each value of the row represent what interface has to be tested by one of the students of that level.
 
 
 
@@ -149,21 +150,20 @@ search$interface = as.factor(search$interface)
 searchaov = lm(time~interface+skill,data=search)
 anova(searchaov)
 ```
-We get a p-value for interface of `r anova(searchaov)[[5]][1]`. Which indicates that we can reject that the mean of the interfaces are the same.
+We get a p-value for interface of `r anova(searchaov)[[5]][1]`. Which indicates that we can reject that the null hypothesis that the mean of the interfaces are the same.
 
 
 ### Task 4
 
-We load the library multcom in order to be able to make multiple comparison. Then we perform the analysis.
-```{r,results="hide"}
-library(multcomp)
+We perform the analysis.
+```{r}
+
 searchaov2 = lm(time~interface+skill,data=search)
 
-searchmult = glht(searchaov2,linfct=mcp(skill="Tukey"))
-summary(searchmult)
+summary(searchaov2)
 ```
-According to the test 4 - 3 == 0 has an estimate of 2.267.
-That's the estimate time for a user of skill 4 with the interface 3.
+
+with the formula Y~i,b,n~ = mu + alpha~i~ + beta~b~ + error we get Y~4,3~ = 15.01 + 5.3 + 4.46 = 24.77, which is the estimate of a user with skill 4 who is using interface 3.
 
 
 ### Task 5
@@ -201,7 +201,7 @@ searchaov = lm(time~interface,data=search)
 
 anova(searchaov)
 ```
-We get p-value of `ranova(searchaov)[[5]][1]` so we cannot reject that the means are the same for the different interfaces.
+We get p-value of `r anova(searchaov)[[5]][1]` so we cannot reject that the means are the same for the different interfaces.
 
 It is not useful because the variable skill should also be considered since according to the interaction plots there is interaction between skill and interface.
 
@@ -216,33 +216,66 @@ The population doesn't seem normal therefore the assumption is not met.
 
 ## Exercise 3
 
+We load the data from the data source.
 ```{r}
-# Add Code
+cream = read.table("cream.txt", header=TRUE)
+attach(cream)
 ```
 
 ### Task 1
 
+
+Then we perform the analysis in a three way experiments without interactions. After that, we do multi-factor anova test. In our case we have three factors.
 ```{r}
-# Add Code
+cream$batch = as.factor(cream$batch)
+cream$position = as.factor(cream$position)
+cream$starter = as.factor(cream$starter)
+
+creamaov = lm(acidity~starter+batch+position, data = cream)
+anova(creamaov)
 ```
+
+The p-value for the factor "starter" is 2.904e-05, the p-value for factor "batch" is 0.002 and the p-value for the factor "position" is 0.41.
+
+Therefore, we can conclude that we can't reject the null hypothesis for position factor. So, position does not have any main effect. On the other hand, if we look into the p-values of both starter and batch then we can conclude that both of these factors have main effect. Since, we can reject our null hypothesis for both these factors.
 
 ### Task 2
 
+Now for this task we are taking the summary to produce the table of p-values.
+
 ```{r}
-# Add Code
+creammult =glht(creamaov,linfct=mcp(starter="Tukey")) # For starter
+summary(creammult)
 ```
+
+From the above table we can see that, the p-values that are less than 0.05 are: 4 -1 == 0, 4 - 2 == 0, 4 - 3 == 0, 5 - 4 == 0.
+Hence, he starter that leads to significant different acidity is number starter4.
 
 ### Task 3
 
+We are taking into consideration of the summary 
 ```{r}
-# Add Code
+creamaov = lm(acidity~starter+batch+position, data = cream)
+summary(creamaov)
 ```
+
+From task 2, we get a p-value = 0.99 (for alpha2 - alpha1 = 0).
+Running the summary, we get the p-value = 0.75 (for alpha2 - alpha1 = 0). So, for simultaneous p-values we get a higher p-value compared to the p-value that we get running the summary for task 1. The reason behind this could be for simultaneous p-values the probabilty of getting accurate values is higher.
 
 ### Task 4
 
+We produce a table with confidence intervals.
 ```{r}
-# Add Code
+confint(creammult) 
 ```
+
+The intervals that do not contain 0 are the following:
+4 - 1 == 0  [1.3198,4.3002]
+4 - 2 == 0  [1.4698 ,4.4502]
+4 - 3 == 0  [2.2998,5.2802]
+5 - 4 == 0 [-4.7842 -1.8038]
+
+This indicates that the starter4 has main effect compared to the rest of other starters.
 
 ## Exercise 4
 
@@ -260,11 +293,11 @@ cowslm=lm(milk~treatment+per+id,data=cows)
 
 ```
 ```{r}
-summary(cowslm)[[4]]
+cowsanova=lm(milk~id+per+treatment,data=cows)
+anova(cowsanova) 
 ```
 
-
-As we can see in the p-values [`r summary(cowslm)[[4]][[35]]`] of the treatment, we can see that it is higher than 0.05. Thus, we cannot reject the hypothesis that treatment doesn't have any main effect on milk production.
+As we can see after running anova we get a p-value = 0.52, which is greater than 0.05. Therefore, we cannot reject the hypothesis that treatment doesn't have any main effect on milk production.
 
 
 
@@ -313,33 +346,131 @@ The t-test gives back the p-value [`r t.test(milk[treatment=="A"],milk[treatment
 This test does agree with the conclussion in task 1, where we concluded that the feeding treatment didn't have main influence in the milk production. Which is similar to saying that the difference of the means of milk production between both treatments is 0. Thus, we believe the test is valid to come to the same result
 
 ## Exercise 5
-Exercise 5
+We load the data from the data source.
+
 ```{r}
-# Add Code
+nauseadata = read.table("nauseatable.txt", header = TRUE)
+attach(nauseadata)
 ```
 ### Task 1
 
+We make a vecor of 0's and 1's for the incidence of no nausea and nausea respectively.
 ```{r}
-# Add Code
+
+nonausea_detected = nauseadata[, 1]
+
+nausea_detected = nauseadata[, 2]
+
+nausea = as.vector(rep(1, each = nausea_detected[1]+
+                         nausea_detected[2]+
+                         nausea_detected[3]))
+
+nonausea = as.vector(rep(0, each = nonausea_detected[1]+
+                           nonausea_detected[2]+
+                           nonausea_detected[3]))
+
+nausea_vector = c(nonausea, nausea)
+
 ```
+
+Then we define a function to label the medicines based on the incidence of nausea and no nausea.
+
+```{r}
+label_medicin <- function(label, count){
+  
+   med_label <- as.vector(rep(label, count))
+   
+   return(med_label)
+  
+}
+```
+
+Now we make a vector of medicine with different labels.
+
+```{r}
+# Total count of medicines for No nausea
+C_nonausea = 100
+P1_nonausea = 32
+P2_nonausea = 48
+
+# Total count of medicines for Nausea
+C_nausea =  52
+P1_nausea = 35
+P2_nausea = 37
+
+
+medicin_vector = c(
+  label_medicin("C", C_nonausea), 
+  label_medicin("P1", P1_nonausea), 
+  label_medicin("P2", P2_nonausea), 
+  label_medicin("C", C_nausea), 
+  label_medicin("P1", P1_nausea), 
+  label_medicin("P2", P2_nausea))
+```
+
+After that we set-up our data frame that includes 304 rows in total and two cloumns for nausea and medicine.
+
+```{r}
+nausea.frame = data.frame(nausea_vector, medicin_vector)
+```
+
+We assigned labels "C" for Chlorpromazine, "P1" for Pentobarbital(100mg) and "P2" for Pentobarbital(150mg). 
+
+We could have assigned same label for both doses of Pentobarbital. But we want to be specific so we used different labels for each one.
+
 
 ### Task 2
 
+To study the outcome of xtabs we execute the following function:
+
 ```{r}
-# Add Code
+xtabs(~medicin_vector+nausea_vector, data = nausea.frame)
 ```
+
+In this case R does not give the warning, since the approximation is reliable for
+nausea_vector and medicin_vector in nausea.frame
+
+And if we study the outcome, we see that with xtabs we get a contingency table from the medicine and nausea factors.
+
+We can see that there are more people suffering from nausea with the medicine Chlorpromazine than with Pentobarbital.
+
+
 
 ### Task 3
 
+We perform the permutation test. 
+
 ```{r}
-# Add Code
+B = 1000
+tstar =  numeric(B)
+for (b in 1:B) {
+ medicinstar = sample(medicin_vector) 
+ tstar[b] = chisq.test(xtabs(~medicinstar+nausea_vector, data = nausea.frame))[[1]] 
+}
+
+myt = chisq.test(xtabs(~medicin_vector+nausea_vector, data = nausea.frame))[[1]]
+
+hist(tstar)
+
+pl = sum(tstar<myt)/B
+pr = sum(tstar>myt)/B
+
+pmin = min(pl,pr)
+pvalue = 2*pmin
 ```
+
+Findings: We get a p-value = `r pvalue`. Therefore, we can not reject that the two medicines have a significant difference. So, we can conclude that, both of them work equally well for nausea.
 
 ### Task 4
 
+In order to perform the chisq test we run the following code block:
 ```{r}
-# Add Code
+pvalue_chisq = chisq.test(xtabs(~medicin_vector+nausea_vector, data = nausea.frame))[[3]]
+
+pvalue_tstar=2*pmin
 ```
+
+If we look into the outcome from above code, we get a p-value = `r pvalue_chisq` for chisq test. While on the other hand, by executing the permutation test we get a p-value = `r pvalue_tstar`. Observing these two p-values we can say that they are different.
 
 ## Exercise 6
 
@@ -417,7 +548,7 @@ poplm = lm(oxidant~wind+temperature+insolation,data=pollution)
 ```
 Multiple R-squared: [`r summary(poplm)[[8]]`]
 
-Now we can see that none of these are relevant for hte linear regression.
+Now we can see that none of these are relevant for the linear regression.
 
 Our final linear regression model using step-up is: oxidant = -5.0 -0.43\*wind + 0.52*temperature
 
@@ -549,11 +680,11 @@ summary(crimelm)[[4]]
 ```
 Multiple R-squared: [`r summary(crimelm)[[8]]`]
 
-The variable lawyers is the one with a higher Multiple R-squared value. However, if we look at the different variables, adding any of these would yield insignificant explanatory variables. The change would be +0.001 at best compared with the last model. Therefore, we discard these variables and our model is finished.
+The variable lawyers is the one with a higher Multiple R-squared value. However, if we look at the different variables, adding any of these would yield insignificant explanatory variables. The change would be +0.001 at best compared with the last model. Therefore, we discard these variables and we should stop at the previous step to finalize our model.
 
 The resulting model after the step-up method is:
 
-expend = -1.107e+02 + 2.971e-02*employ + error
+expend = -1.167e+02 + 4.681e-02*employ  + error
 
 
 
@@ -590,9 +721,9 @@ summary(crimelm)[[4]]
 As we can see, all the p-values are smaller than 0.05, thu meaning that all the variables are significant for our model.
 
 
-The resulting model of the step-up method is:
+The resulting model of the step-down method is:
 
-expend = -1.107e+02 + 2.971e-02*employ + 2.69e-02*lawyers + error
+expend = -1.107e+02 + 2.971e-02\*employ + 2.686e-02\*lawyers + error
 
 
 ### Comparing the models 
@@ -633,7 +764,7 @@ In this case, we compare the number of explanatory variables per model. Looking 
 It is important that we check whether the explanatory variables are difficult to interprete. In this case, both variables are numerical. The variable "employ" makes reference to the number of persons employed in the state. On the other hand, the variable "lawyers" is the number of lawyers in the state.
 
 #### Our choice
-We've seen that both models don't differ that much one from another. However, we decided to choose the model provided by the step-up method. We chose this model since it has one less explanatory variable. Although the R value is higher for the step-down model, it only differs by 0.09, which in our opinion is not a big loss and lets us one less variable. 
+We've seen that both models don't differ that much one from another. However, we decided to choose the model provided by the step-up method. We chose this model since it has one less explanatory variable. Although the R value is higher for the step-down model, it only differs by 0.09, which in our opinion is not a big loss and it allows us to use the model with one less variable. 
 
 
 ### Task a

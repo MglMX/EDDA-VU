@@ -1,5 +1,6 @@
 ###EXERCISE 1
-
+library(multcomp)
+library(lme4)
 ##T1
 
 bread = read.table("bread.txt", header=TRUE)
