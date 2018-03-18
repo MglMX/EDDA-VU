@@ -8,182 +8,827 @@ output:
 fontsize: 11pt
 highlight: tango
 ---
+```{r,echo=FALSE, warning=FALSE,results='hide',message=FALSE}
+options(digits = 3) #Showing only 3 decimals
+library(multcomp)
+library(lme4)
+```
+
 
 ## Exercise 1
-Exercise 1
-```{r}
-# Add Code
+
+We load the data from the data source.
+```{r, results='hide'}
+bread = read.table("bread.txt", header=TRUE)
+attach(bread)
 ```
 
-### ( 1 ) 
-Exercise 1: Task-1
+### Task 1 
+
+For the randomization task, we define the variables N (the number of units for each combination), I (the levels of humidity) and J (the levels of environment). Then we perform the randomization.
+
 ```{r}
-# Add Code
+N=3
+I=2
+J=3
+
+rbind(rep(1:I, each = N*J), rep(1:J, N*I), sample(1:(N*I*J)))
+
 ```
 
-### ( 2 )
-Exercise 1: Task-2
+This way we can randomoly assign slices of bread to the different combination of the two factors.
+
+### Task 2
+
+First we make the 2 boxplots of hours versus the factors.
+
 ```{r}
-# Add Code
+boxplot(hours~environment,data=bread)
+boxplot(hours~humidity,data=bread)
 ```
+
+Next, we show the interaction plots against these same factors.
+```{r}
+interaction.plot(humidity,environment,hours)
+interaction.plot(environment,humidity,hours)
+```
+
+### Task 3
+
+We perform an ANOVA test to see the effect and interactions.
+```{r, results='hide'}
+
+bread$humidity=as.factor(bread$humidity)
+bread$environment=as.factor(bread$environment)
+breadaov=lm(hours~humidity*environment,data=bread)
+anova(breadaov)
+
+```
+
+We can see that environment and humidity have a main effect according to their p-values 2.46e-10 and 4.32e-06 respectively. 
+
+Looking at the p-value of humidity:environment = 3.71e-07, we see that there is interaction between the two factors.
+
+In summary, this means that the hours it takes to get the bread to decay is influenced by the combination of this two factors and its combinations.
+
+
+### Task 4
+
+```{r, results='hide'}
+contrasts(bread$humidity)=contr.sum
+contrasts(bread$environment)=contr.sum
+breadaov2=lm(hours~humidity*environment,data=bread)
+```
+
+
+```{r}
+summary(breadaov2)[[4]]
+```
+Here we can see that theenvironment factor affects the in a bigger way than humidity. We can see changes of [`r summary(breadaov2)[[4]][3]`] and [`r summary(breadaov2)[[4]][4]`] in comparison with [`r summary(breadaov2)[[4]][2]`]. 
+
+However, we don't think it's a good question, since we believe the core of the influence resides in the interaction between these two factors rather than only in one of them, even if it shows bigger changes. 
+
+### Task 5
+
+Finally, we will check the assumptions. First we perform a QQ-plot with the residuals for normality.
+```{r}
+qqnorm(residuals(breadaov2))
+```
+The normality according to the QQ-plot could be doubtful because of the extreme values.
+
+Next, we check the scatter plot of fitted values vs residuals for outliers.
+```{r}
+plot(fitted(breadaov2),residuals(breadaov2))
+```
+In the plot we see that the values don't change systematically. We can see some outliers between 200 and 300.
+
 
 ## Exercise 2
-Exercise 2
+
+We load the data from the data source.
 ```{r}
-# Add Code
+search=read.table("search.txt",header = TRUE);
+attach(search)
 ```
 
-### ( 1 ) 
-Exercise 2: Task-1
+### Task 1
+
+For the randomization task, we define the variables N (the dependent variable), I (the treatment) and B (the block). Then we perform the randomization.
 ```{r}
-# Add Code
+N=1
+I=3
+B=5
+
+for (i in 1:B){
+  print(sample(1:(N*I)))
+}
+
+```
+The rows in the matrix represent the skill level of the students. Row 1 is level 1, row 2 is level 2, etc.
+
+Each value of the row represent what interface has to be tested by one of the students of that level.
+
+
+
+### Task 2
+
+```{r}
+interaction.plot(skill,interface,time)
+interaction.plot(interface,skill,time)
 ```
 
-### ( 2 )
-Exercise 2: Task-2
-```{r}
-# Add Code
-```
+The lines do not seem parallel. Therefore, we can say that there is interaction between interface and skill.
 
 
-### ( 3 ) 
-Exercise 2: Task-3
+### Task 3
+
+We consider the variables as factors because they are numbers. Then, we perform a 2-way anova test.
+```{r,results="hide"}
+search$skill = as.factor(search$skill)
+search$interface = as.factor(search$interface)
+
+searchaov = lm(time~interface+skill,data=search)
+anova(searchaov)
+```
+We get a p-value for interface of `r anova(searchaov)[[5]][1]`. Which indicates that we can reject that the null hypothesis that the mean of the interfaces are the same.
+
+
+### Task 4
+
+We perform the analysis.
 ```{r}
-# Add Code
+
+searchaov2 = lm(time~interface+skill,data=search)
+
+summary(searchaov2)
 ```
 
-### ( 4 )
-Exercise 2: Task-4
+with the formula Y~i,b,n~ = mu + alpha~i~ + beta~b~ + error we get Y~4,3~ = 15.01 + 5.3 + 4.46 = 24.77, which is the estimate of a user with skill 4 who is using interface 3.
+
+
+### Task 5
+
 ```{r}
-# Add Code
+qqnorm(residuals(searchaov2))
+qqline(residuals(searchaov2))
 ```
+The QQ-plot seems a bit deviated in the extremes but it could be normal.
+
+```{r}
+plot(fitted(searchaov2),residuals(searchaov2))
+```
+We see that the residuals don't change systematically with the fitted values.
+So we can assume that the populations have equal variances.
+
+
+### Task 6
+
+We perform the Friedman test.
+```{r}
+friedman.test(search$time,search$interface,search$skill)
+```
+We reject H0 (Interface doesn't have an effect) so we can say that the interface makes an effect.
+
+
+### Task 7
+
+we perform the one-way anova test.
+
+```{r,result="hide"}
+search$interface = as.factor(search$interface)
+
+searchaov = lm(time~interface,data=search)
+
+anova(searchaov)
+```
+We get p-value of `r anova(searchaov)[[5]][1]` so we cannot reject that the means are the same for the different interfaces.
+
+It is not useful because the variable skill should also be considered since according to the interaction plots there is interaction between skill and interface.
+
+1-way-anova assumes that the data come from normal population and the variances are equal
+```{r}
+qqnorm(residuals(searchaov))
+qqline(residuals(searchaov))
+```
+The population doesn't seem normal therefore the assumption is not met.
+
+
 
 ## Exercise 3
-Exercise 3
+
+We load the data from the data source.
 ```{r}
-# Add Code
+cream = read.table("cream.txt", header=TRUE)
+attach(cream)
 ```
 
-### ( 1 ) 
-Exercise 3: Task-1
+### Task 1
+
+
+Then we perform the analysis in a three way experiments without interactions. After that, we do multi-factor anova test. In our case we have three factors.
 ```{r}
-# Add Code
+cream$batch = as.factor(cream$batch)
+cream$position = as.factor(cream$position)
+cream$starter = as.factor(cream$starter)
+
+creamaov = lm(acidity~starter+batch+position, data = cream)
+anova(creamaov)
 ```
 
-### ( 2 )
-Exercise 3: Task-2
+The p-value for the factor "starter" is 2.904e-05, the p-value for factor "batch" is 0.002 and the p-value for the factor "position" is 0.41.
+
+Therefore, we can conclude that we can't reject the null hypothesis for position factor. So, position does not have any main effect. On the other hand, if we look into the p-values of both starter and batch then we can conclude that both of these factors have main effect. Since, we can reject our null hypothesis for both these factors.
+
+### Task 2
+
+Now for this task we are taking the summary to produce the table of p-values.
+
 ```{r}
-# Add Code
+creammult =glht(creamaov,linfct=mcp(starter="Tukey")) # For starter
+summary(creammult)
 ```
+
+From the above table we can see that, the p-values that are less than 0.05 are: 4 -1 == 0, 4 - 2 == 0, 4 - 3 == 0, 5 - 4 == 0.
+Hence, he starter that leads to significant different acidity is number starter4.
+
+### Task 3
+
+We are taking into consideration of the summary 
+```{r}
+creamaov = lm(acidity~starter+batch+position, data = cream)
+summary(creamaov)
+```
+
+From task 2, we get a p-value = 0.99 (for alpha2 - alpha1 = 0).
+Running the summary, we get the p-value = 0.75 (for alpha2 - alpha1 = 0). So, for simultaneous p-values we get a higher p-value compared to the p-value that we get running the summary for task 1. The reason behind this could be for simultaneous p-values the probabilty of getting accurate values is higher.
+
+### Task 4
+
+We produce a table with confidence intervals.
+```{r}
+confint(creammult) 
+```
+
+The intervals that do not contain 0 are the following:
+4 - 1 == 0  [1.3198,4.3002]
+4 - 2 == 0  [1.4698 ,4.4502]
+4 - 3 == 0  [2.2998,5.2802]
+5 - 4 == 0 [-4.7842 -1.8038]
+
+This indicates that the starter4 has main effect compared to the rest of other starters.
 
 ## Exercise 4
-Exercise 4
-```{r}
-# Add Code
+
+First, we load the data from the data source.
+```{r, results='hide'}
+cows = read.table("cow.txt", header = TRUE)
 ```
 
-### ( 1 ) 
-Exercise 4: Task-1
+### Task 1
+
+```{r, results='hide'}
+cows$id=factor(cows$id)
+cows$per=factor(cows$per)
+cowslm=lm(milk~treatment+per+id,data=cows)
+
+```
 ```{r}
-# Add Code
+cowsanova=lm(milk~id+per+treatment,data=cows)
+anova(cowsanova) 
 ```
 
-### ( 2 )
-Exercise 4: Task-2
-```{r}
-# Add Code
-```
+As we can see after running anova we get a p-value = 0.52, which is greater than 0.05. Therefore, we cannot reject the hypothesis that treatment doesn't have any main effect on milk production.
 
-### ( 3 )
-Exercise 4: Task-3
-```{r}
-# Add Code
+
+
+### Task 2
+
+```{r, results='hide'}
+milkdif =glht(cowslm,linfct=mcp(treatment="Tukey")) 
 ```
+We can see that the estimate of B-A is [`r summary(milkdif)[[10]][[3]][[1]]`]. In addition to this, we see thatthe p-value is [`r summary(milkdif)[[10]][[6]][[1]]`].
+
+With this, we can't reject that the difference in milk production with treatment A is equal to the one using treatment B.
+
+
+### Task 3
+
+#### Checking influence in milk production
+
+```{r, results='hide'}
+cowslmer=lmer(milk~treatment+order+per+(1|id),data=cows,REML=FALSE)
+cowslmer1=lmer(milk~order+per+(1|id),data=cows,REML=FALSE)
+anova(cowslmer1,cowslmer)
+
+```
+As we can see in the p-values [`r anova(cowslmer1,cowslmer)[[8]][2]`] of the tratment, we can see that it is higher than 0.05. Thus, we cannot reject the hypothesis that treatment doesn't have any main effect on milk production.
+
+#### Estimating the difference
+
+```{r, results='hide'}
+milkdiflmer =glht(cowslmer,linfct=mcp(treatment="Tukey")) 
+```
+We can see that the estimate of B-A is [`r summary(milkdiflmer)[[10]][[3]][[1]]`]. In addition to this, we see that the p-value is [`r summary(milkdiflmer)[[10]][[6]][[1]]`].
+
+With this, we can't reject that the difference in milk production with treatment A is equal to the one using treatment B.
+
+
+### Task 4
+
+The following command performs a t-test of the milk production using treatment a and milk production using treatment B. The test will help us say if the difference between these is 0 or not.
+
+```{r, results='hide'}
+attach(cows)
+t.test(milk[treatment=="A"],milk[treatment=="B"],paired=TRUE)
+```
+The t-test gives back the p-value [`r t.test(milk[treatment=="A"],milk[treatment=="B"],paired=TRUE)[[3]]`]. With this, we can't reject that the difference is = to 0.
+
+This test does agree with the conclussion in task 1, where we concluded that the feeding treatment didn't have main influence in the milk production. Which is similar to saying that the difference of the means of milk production between both treatments is 0. Thus, we believe the test is valid to come to the same result
 
 ## Exercise 5
-Exercise 5
+We load the data from the data source.
+
 ```{r}
-# Add Code
+nauseadata = read.table("nauseatable.txt", header = TRUE)
+attach(nauseadata)
+```
+### Task 1
+
+We make a vecor of 0's and 1's for the incidence of no nausea and nausea respectively.
+```{r}
+
+nonausea_detected = nauseadata[, 1]
+
+nausea_detected = nauseadata[, 2]
+
+nausea = as.vector(rep(1, each = nausea_detected[1]+
+                         nausea_detected[2]+
+                         nausea_detected[3]))
+
+nonausea = as.vector(rep(0, each = nonausea_detected[1]+
+                           nonausea_detected[2]+
+                           nonausea_detected[3]))
+
+nausea_vector = c(nonausea, nausea)
+
 ```
 
-### ( 1 ) 
-Exercise 5: Task-1
+Then we define a function to label the medicines based on the incidence of nausea and no nausea.
+
 ```{r}
-# Add Code
+label_medicin <- function(label, count){
+  
+   med_label <- as.vector(rep(label, count))
+   
+   return(med_label)
+  
+}
 ```
 
-### ( 2 )
-Exercise 5: Task-2
+Now we make a vector of medicine with different labels.
+
 ```{r}
-# Add Code
+# Total count of medicines for No nausea
+C_nonausea = 100
+P1_nonausea = 32
+P2_nonausea = 48
+
+# Total count of medicines for Nausea
+C_nausea =  52
+P1_nausea = 35
+P2_nausea = 37
+
+
+medicin_vector = c(
+  label_medicin("C", C_nonausea), 
+  label_medicin("P1", P1_nonausea), 
+  label_medicin("P2", P2_nonausea), 
+  label_medicin("C", C_nausea), 
+  label_medicin("P1", P1_nausea), 
+  label_medicin("P2", P2_nausea))
 ```
+
+After that we set-up our data frame that includes 304 rows in total and two cloumns for nausea and medicine.
+
+```{r}
+nausea.frame = data.frame(nausea_vector, medicin_vector)
+```
+
+We assigned labels "C" for Chlorpromazine, "P1" for Pentobarbital(100mg) and "P2" for Pentobarbital(150mg). 
+
+We could have assigned same label for both doses of Pentobarbital. But we want to be specific so we used different labels for each one.
+
+
+### Task 2
+
+To study the outcome of xtabs we execute the following function:
+
+```{r}
+xtabs(~medicin_vector+nausea_vector, data = nausea.frame)
+```
+
+In this case R does not give the warning, since the approximation is reliable for
+nausea_vector and medicin_vector in nausea.frame
+
+And if we study the outcome, we see that with xtabs we get a contingency table from the medicine and nausea factors.
+
+We can see that there are more people suffering from nausea with the medicine Chlorpromazine than with Pentobarbital.
+
+
+
+### Task 3
+
+We perform the permutation test. 
+
+```{r}
+B = 1000
+tstar =  numeric(B)
+for (b in 1:B) {
+ medicinstar = sample(medicin_vector) 
+ tstar[b] = chisq.test(xtabs(~medicinstar+nausea_vector, data = nausea.frame))[[1]] 
+}
+
+myt = chisq.test(xtabs(~medicin_vector+nausea_vector, data = nausea.frame))[[1]]
+
+hist(tstar)
+
+pl = sum(tstar<myt)/B
+pr = sum(tstar>myt)/B
+
+pmin = min(pl,pr)
+pvalue = 2*pmin
+```
+
+Findings: We get a p-value = `r pvalue`. Therefore, we can not reject that the two medicines have a significant difference. So, we can conclude that, both of them work equally well for nausea.
+
+### Task 4
+
+In order to perform the chisq test we run the following code block:
+```{r}
+pvalue_chisq = chisq.test(xtabs(~medicin_vector+nausea_vector, data = nausea.frame))[[3]]
+
+pvalue_tstar=2*pmin
+```
+
+If we look into the outcome from above code, we get a p-value = `r pvalue_chisq` for chisq test. While on the other hand, by executing the permutation test we get a p-value = `r pvalue_tstar`. Observing these two p-values we can say that they are different.
 
 ## Exercise 6
-Exercise 6
+
+First we load the data from the data source.
+```{r}
+pollution = read.table("airpollution.txt",header=TRUE)
+```
+
+### Task 1
+
+```{r}
+pairs(pollution)
+```
+
+Looking at the scatter plots, there seems to be a correlation between wind and humidity, temperature and oxidant. Therefore we will check the correlation.
+```{r}
+round(cor(pollution[,2:6]),2)
+```
+Looking at the table, we can see that our assumptions are not true, there seems to be no correlation between these variables.
+
+
+### Task 2
+
 ```{r}
 # Add Code
 ```
 
-### ( 1 ) 
-Exercise 6: Task-1
-```{r}
-# Add Code
+First we perform the test on each of the explanatory variables to get the best.
+```{r, results='hide'}
+poplm = lm(oxidant~wind,data=pollution)
+```
+Multiple R-squared: [`r summary(poplm)[[8]]`]
+
+```{r, results='hide'}
+poplm = lm(oxidant~temperature,data=pollution)
+```
+Multiple R-squared: [`r summary(poplm)[[8]]`]
+
+```{r, results='hide'}
+poplm = lm(oxidant~humidity,data=pollution)
+```
+Multiple R-squared: [`r summary(poplm)[[8]]`]
+
+```{r, results='hide'}
+poplm = lm(oxidant~insolation,data=pollution)
+```
+Multiple R-squared: [`r summary(poplm)[[8]]`]
+
+The variable that gives higher R-squared is wind. Therefore, we add it to our model. 
+
+```{r, results='hide'}
+poplm = lm(oxidant~wind+temperature,data=pollution)
+```
+Multiple R-squared: [`r summary(poplm)[[8]]`]
+
+```{r, results='hide'}
+poplm = lm(oxidant~wind+humidity,data=pollution)
+```
+Multiple R-squared: [`r summary(poplm)[[8]]`]
+
+```{r, results='hide'}
+poplm = lm(oxidant~wind+insolation,data=pollution)
+```
+Multiple R-squared: [`r summary(poplm)[[8]]`]
+
+The one with higer value is temperature. So we also add it to our model and continue looking for variables.
+
+```{r, results='hide'}
+poplm = lm(oxidant~wind+temperature+humidity,data=pollution)
+```
+Multiple R-squared: [`r summary(poplm)[[8]]`]
+
+```{r, results='hide'}
+poplm = lm(oxidant~wind+temperature+insolation,data=pollution)
+```
+Multiple R-squared: [`r summary(poplm)[[8]]`]
+
+Now we can see that none of these are relevant for the linear regression.
+
+Our final linear regression model using step-up is: oxidant = -5.0 -0.43\*wind + 0.52*temperature
+
+
+### Task 3
+
+```{r, results='hide'}
+
+poplm = lm(oxidant~wind+temperature+humidity+insolation,data=pollution)
+summary(poplm)[[4]]
+```
+The one with highest p-value is insolation. Since it is bigger than 0.05, we delete insolation from the model.
+
+```{r, results='hide'}
+
+poplm = lm(oxidant~wind+temperature+humidity,data=pollution)
+summary(poplm)[[4]]
+```
+The one with highest p-value is humidity Since it is bigger than 0.05, we delete insolation from the model.
+
+```{r, results='hide'}
+
+poplm = lm(oxidant~wind+temperature,data=pollution)
+summary(poplm)[[4]]
 ```
 
-### ( 2 )
-Exercise 6: Task-2
-```{r}
-# Add Code
-```
+There's no variable with a p-value bigger than 0.05. Thus, all variables are significant for our model.
+
+The final model using step-down is: oxidant = -5.0 -0.43\*wind + 0.52*temperature
+
+### Task 4
+
+Since both methods lead us to the same model, we don't need to compare them to choose.
+
+Estimates: wind = 0.43, temperature = 0.52, humidity = 0, insolation = 0;
 
 
-### ( 3 ) 
-Exercise 6: Task-3
+### Task 5
+
+To check the normality we're gonna use a QQ-plot.
 ```{r}
-# Add Code
+qqnorm(residuals(poplm))
+
 ```
 
-### ( 4 )
-Exercise 6: Task-4
-```{r}
-# Add Code
-```
+According to the qqplot the residuals seem normal.
 
-### ( 5 ) 
-Exercise 6: Task-5
-```{r}
-# Add Code
-```
-
-### ( 6 )
-Exercise 6: Task-6
-```{r}
-# Add Code
-```
 
 ## Exercise 7
-Exercise 7
-```{r}
-# Add Code
+
+First, we load the data from the data source.
+
+```{r, results='hide'}
+expcrime =  read.table("expensescrime.txt", header=TRUE)
+
 ```
 
-### ( 1 ) 
-Exercise 7: Task-1
+The next step is choosing our model. For this purpose, we will conduct both "Step-Up" and "Step-Down" methods and compare the resulting models.
+
+### Step-Up Method
+
+With this method, we must choose one by one the most significant variable for our model.For this, we must check their Multiple R-squared value and choose the highest one.
+
 ```{r}
-# Add Code
+#Variable bad
+crimelm=lm(expend~bad,data=expcrime)
+summary(crimelm)[[4]]
+
+```
+Multiple R-squared: [`r summary(crimelm)[[8]]`]
+
+```{r}
+#Variable crime
+crimelm=lm(expend~crime,data=expcrime) 
+summary(crimelm)[[4]]
+
+```
+Multiple R-squared: [`r summary(crimelm)[[8]]`]
+
+```{r}
+#Variable lawyers
+crimelm=lm(expend~lawyers,data=expcrime)
+summary(crimelm)[[4]]
+
+```
+Multiple R-squared: [`r summary(crimelm)[[8]]`]
+
+```{r}
+#Variable pop
+crimelm=lm(expend~pop,data=expcrime) 
+summary(crimelm)[[4]]
+```
+Multiple R-squared: [`r summary(crimelm)[[8]]`]
+
+```{r}
+#Variable employ
+crimelmsu=lm(expend~employ,data=expcrime) 
+summary(crimelm)[[4]]
+```
+Multiple R-squared: [`r summary(crimelmsu)[[8]]`]
+
+Since the variable employ is the one with the biggest Multiple R-squared value, we add it to our model and we continue to the next iteration. Here, we repeat the process but we add the selected variable to the formula.
+
+```{r}
+#Variable bad
+crimelm=lm(expend~employ+bad,data=expcrime) 
+summary(crimelm)[[4]]
+```
+Multiple R-squared: [`r summary(crimelm)[[8]]`]
+
+```{r}
+#Variable crime
+crimelm=lm(expend~employ+crime,data=expcrime)
+summary(crimelm)[[4]]
+```
+Multiple R-squared: [`r summary(crimelm)[[8]]`]
+
+```{r}
+#Variable pop
+crimelm=lm(expend~employ+pop,data=expcrime) 
+summary(crimelm)[[4]]
+```
+Multiple R-squared: [`r summary(crimelm)[[8]]`]
+
+```{r}
+#Variable lawyers
+crimelm=lm(expend~employ+lawyers,data=expcrime) 
+summary(crimelm)[[4]]
+```
+Multiple R-squared: [`r summary(crimelm)[[8]]`]
+
+The variable lawyers is the one with a higher Multiple R-squared value. However, if we look at the different variables, adding any of these would yield insignificant explanatory variables. The change would be +0.001 at best compared with the last model. Therefore, we discard these variables and we should stop at the previous step to finalize our model.
+
+The resulting model after the step-up method is:
+
+expend = -1.167e+02 + 4.681e-02*employ  + error
+
+
+
+### Step-Down Method
+
+With this method, we start with all of the possible variables in our model. Then, we choose the one that gives the highest p-value. If this p-value is bigger than 0.05, we will discard the variable and repeat the process without it.
+
+```{r}
+crimelm=lm(expend~employ+bad+crime+lawyers+pop,data=expcrime) 
+summary(crimelm)[[4]]
 ```
 
-### ( 2 )
-Exercise 7: Task-2
+The variable crime has the highest p-value with a p-value of [`r summary(crimelm)[[4]][22]`]. Since this p-value is bigger than 0.05, we discard it for our model and continue to the next iteration.
+
 ```{r}
-# Add Code
+crimelm=lm(expend~employ+bad+lawyers+pop,data=expcrime) 
+summary(crimelm)[[4]]
 ```
 
+The variable pop has the highest p-value with a p-value of [`r summary(crimelm)[[4]][20]`]. Since this p-value is bigger than 0.05, we discard it for our model and continue to the next iteration.
 
-### ( 3 ) 
-Exercise 7: Task-3
 ```{r}
-# Add Code
+crimelm=lm(expend~employ+bad+lawyers,data=expcrime) 
+summary(crimelm)[[4]]
 ```
 
-## Our Explanations/Findings : 
+The variable bad has the highest p-value with a p-value of [`r summary(crimelm)[[4]][15]`]. Since the p-value is bigger than 0.05, we discard it for our model and continue to the next iteration.
+
+```{r}
+crimelmsd=lm(expend~employ+lawyers,data=expcrime)
+summary(crimelm)[[4]]
+```
+
+As we can see, all the p-values are smaller than 0.05, thu meaning that all the variables are significant for our model.
+
+
+The resulting model of the step-down method is:
+
+expend = -1.107e+02 + 2.971e-02\*employ + 2.686e-02\*lawyers + error
+
+
+### Comparing the models 
+
+#### R values
+
+Comparing the R-values of both models, we can see that the R-value of the step-down model is higher than the one of the step-up model. In this case a higher value is better.
+
+Step-up model: Multiple R-squared = [`r summary(crimelmsu)[[8]]`]
+
+Step-down model: Multiple R-squared = [`r summary(crimelmsd)[[8]]`]
+
+
+#### Plots: Fitted values vs Residuals
+
+Comparing the Fitted vs Residuals plots of both models, we look for specific structures.
+
+Step-up model plot:
+```{r, results='hide'}
+plot(residuals(crimelmsu), fitted(crimelmsu))
+```
+ 
+Step-down model plot:
+```{r, results='hide'}
+plot(residuals(crimelmsd), fitted(crimelmsd))
+```
+
+As we can see, none of them follow any specific structure so we can conclude both models are equally fit in this aspect.
+
+
+#### Explanatory variables
+
+In this case, we compare the number of explanatory variables per model. Looking at the models, we see that the step-up model has 1 explanatory variable (employ), whereas the step-down model has 2 (employ+lawyers). In this case, less variables are better.
+
+
+#### Character of the explanatory variables
+
+It is important that we check whether the explanatory variables are difficult to interprete. In this case, both variables are numerical. The variable "employ" makes reference to the number of persons employed in the state. On the other hand, the variable "lawyers" is the number of lawyers in the state.
+
+#### Our choice
+We've seen that both models don't differ that much one from another. However, we decided to choose the model provided by the step-up method. We chose this model since it has one less explanatory variable. Although the R value is higher for the step-down model, it only differs by 0.09, which in our opinion is not a big loss and it allows us to use the model with one less variable. 
+
+
+### Task a
+
+In order to investigate the influence points, we calculate the cooks distance and make a plot to spot the outliers.
+
+```{r, results='hide'}
+round(cooks.distance(crimelmsu), 2)
+```
+
+Plot:
+```{r}
+plot(cooks.distance(crimelmsu))
+```
+
+Here we clearly have encountered an influence point: the Cook’s distance is [`r round(cooks.distance(crimelmsu), 2)[[5]]`] for the potential point.
+
+
+### Task b
+
+To investigate collinearity problems, we first have to check the pairs with the scatter plot.
+
+```{r}
+pairs(expcrime)
+```
+Here we can see that the variables "expend" and "lawyers" look somewhat collinear. We will now check the linear correlation between both.
+
+```{r}
+round(cor(expcrime[,5:6]),2)
+```
+
+As suspected, both variables are collinear with [`r round(cor(expcrime[,5:6]),2)[[2]]`]. This agrees with our model since we can't have 2 collinear variables in the same model. 
+
+
+### Task c
+
+As a final task, we will investigate the residuals. For this we will use several plots.
+
+First, a scatter plot of the residuals against the variable in the model to look at the pattern and spread.
+```{r}
+attach(expcrime)
+plot(residuals(crimelmsu),employ)
+```
+They don't seem to follow any kind of curved structure, which would mean that there's no linear relation between them.
+
+
+In continuation, another scatter plot but this time against the variables that are not in the model.
+```{r}
+plot(residuals(crimelmsu),pop)
+plot(residuals(crimelmsu),bad)
+plot(residuals(crimelmsu),crime)
+plot(residuals(crimelmsu),lawyers)
+```
+In result, we can't find any kind of linear structure, which would mean that we would need to include them in the model beacuse of the relation.
+
+Next, we will scatter against the response variable.
+```{r}
+plot(residuals(crimelmsu),expend)
+plot(residuals(crimelmsu),fitted(crimelmsu))
+```
+The spread looks good.
+
+And finally, we will perform a Saphiro test to check the normality assumption.
+```{r, results='hide'}
+shapiro.test(residuals(crimelmsu))
+```
+As we can see above, the p-value for the test is really low,  2.11e-06. This means that the assumption of normality is, if only, doubtful.
