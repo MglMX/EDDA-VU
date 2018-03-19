@@ -37,7 +37,7 @@ expsiglm2=glm(passed~psi+gpa, data=expsi,family=binomial)
 summary(expsiglm2)
 
 #estimations shown, I think intercept+psi1 + gpa3.0 would be the first estimation 
-#and intercept+gpa3.0 would be the second
+#and intercept+gpa3.0 would be the second. 
 
 #T5
 
@@ -45,6 +45,15 @@ summary(expsiglm2)
 
 #T6
 
+x=matrix(c(3,15,8,6),2,2)
+x
+fisher.test(x)
+
+#15 is the people that didn't show improvement from the 18 
+#and 3 is the people that showed improvement
+#Same with the second column out of 14 8 showed improvement and 6 didn't
+#So first column is students not receiving psi and second is the students receiving it
+#row 1 shows the students that improved and row 2 the rest that didn't
 
 
 #T7
