@@ -16,106 +16,156 @@ library(lme4)
 ```
 
 
-## Exercise 2
+## Exercise 1
 
 We load the data from the data source.
 ```{r}
-
+flies = read.table("fruitflies.txt",header=TRUE);
 ```
 
 ### Task 1 
 
-
+We add the logarithm of longevity in the data frame.
 
 ```{r}
-
-
+fliesframe = data.frame(thorax=flies$thorax,longevity=flies$longevity,activity=flies$activity,loglongevity=log(flies$longevity))
+fliesframe
 ```
 
-#### Findings: 
 
 ### Task 2
 
 ```{r}
-
-
+hist(fliesframe$thorax)
+qqnorm(fliesframe$thorax)
 ```
+The population of thorax does not seem normal.
 
-#### Findings: 
+```{r}
+hist(fliesframe$loglongevity)
+qqnorm(fliesframe$loglongevity)
+```
+The population of loglongevity does not seem normal.
+
 
 ### Task 3
 
+We perfom an anova just considering the sexual activity
 ```{r}
-
-
+fliesanova = lm(longevity~activity,data=fliesframe)
+anova(fliesanova)
 ```
+We get a p-value 1.931e-07, therefore, H0 is reject so we can say that sexual activity affects the longevity of the flies.
 
-#### Findings: 
 
 ### Task 4
 
 ```{r}
-
-
+summary(fliesanova)
 ```
-
-#### Findings: 
+According to the estimates longevity increases with sexual activity. 
+..* High activity 38.72
+..* Low activity 38.72 - 24.84 = 3.94
+..* Isolated 38.72 - 18 = 20.72
 
 
 ### Task 5
 
+We make a 2-way anova.
 ```{r}
+fliesframe$activity = as.factor(fliesframe$activity)
+fliesframe$thorax = as.factor(fliesframe$thorax)
 
-
+fliesanova2 = lm(loglongevity~activity+thorax,data = fliesframe) #Should I use * or +
+anova(fliesanova2)
 ```
-
-#### Findings: 
+We obtain a p-value of 1.141e-13, therefore, we can say that activity has a main effect on longevity when we consider the thorax length.
 
 ### Task 6
-
+First we calculate the average thorax length.
 ```{r}
-
+fliesframe$thorax = as.numeric(fliesframe$thorax)
+average_thorax = mean(fliesframe$thorax) 
+fliesframe$thorax = as.factor(fliesframe$thorax)
 
 ```
 
-#### Findings: 
+We obtain an average of `r average_thorax`.
+
+We obtain the summary.
+```{r}
+contrasts(fliesframe$thorax)=contr.sum
+contrasts(fliesframe$activity)=contr.sum
+summary(fliesanova2)
+```
+With the values thorax9 = 0.312 (for the acerage thorax length) and isolated-activity = -0.275, low-activity = 0.186 and high-activity = -(-0.275+0.186) = 0.089, we calculate the estimates for flies with average thorax..
+
+Y~isolated,thorax9~ = 3.802 + 0.312 - 0.275 = 3.839
+Y~low,thorax9~ = 3.802 + 0.312 + 0.186 = 4.3
+Y~high,thorax9~ = 3.802 + 0.312 + 0.089 = 4.203
+
+For the flies with smallest thorax we use the same estimates for activity but we use thorax1 = -0.545.
+
+Y~isolated,thorax1~ = 3.802 - 0.545 - 0.275 = 2.982
+Y~low,thorax1~ = 3.802 - 0.545 + 0.186 = 3.443
+Y~high,thorax1~ = 3.802 - 0.545 + 0.089 = 3.346
+
 
 ### Task 7
 
+In order to investigate graphically how does thorax length influence longevity, we separate in three different variables the data depending on the sexual activity.
 ```{r}
-
-
+fliesframe$thorax = as.numeric(fliesframe$thorax)
+flieshigh = fliesframe[which(fliesframe$activity=="high"),]
+fliesisolated = fliesframe[which(fliesframe$activity=="isolated"),]
+flieslow = fliesframe[which(fliesframe$activity=="low"),]
 ```
 
-#### Findings: 
+Now we plot the thorax length agains the loglongevity.
+```{r}
+plot(flieshigh$thorax,flieshigh$loglongevity,main="High activity with loglongevity")
+plot(fliesisolated$thorax,fliesisolated$loglongevity,main="Isolated activity with loglongevity")
+plot(flieslow$thorax,flieslow$loglongevity,main="Low activity with loglongevity")
+```
+We see that longevity increases with thorax length. We get higher longevity values for flies with low sexual activity and also for high sexual activity. The values seem to be lower when the flies have been isolated. 
 
 ### Task 8
 
-```{r}
+The analysis with the thorax length should not be included because there should not be interaction between the sexual activity and the thorax length. This is because the experimenters randomly chose the sexual activity that the flies were going to have.
 
-
-```
-
-#### Findings: 
 
 ### Task 9
 
 ```{r}
 
-
+qqnorm(residuals(fliesanova2))
 ```
+The normality seems doubtful according to the qq-plot.
 
-#### Findings: 
+```{r}
+plot(fitted(fliesanova2),residuals(fliesanova2))
+```
+The spread in the residuals seem to be bigger with bigger fitted values.
 
 ### Task 10
 
 ```{r}
-
-
+fliesframe$activity=as.factor(fliesframe$longevity)
+fliesaov = lm(longevity~thorax+activity,data=fliesframe)
+drop1(fliesaov,type="F")
 ```
 
-#### Findings: 
 
+```{r}
+qqnorm(residuals(fliesanova))
+qqline(residuals(fliesanova))
+```
+The normality s doubtful. But it could be normal. It seems more normal than when using the logaritmic value of longevity.
+
+```{r}
+plot(fitted(fliesanova),residuals(fliesanova))
+```
+We cannot judge becasue the values are not spread in the x axis. This is a prove that using the logarithmic value was a good idea.
 
 ## Exercise 1
 

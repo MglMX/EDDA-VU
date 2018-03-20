@@ -13,9 +13,9 @@ qqline(fliesframe$thorax)
 shapiro.test(fliesframe$thorax)
 #Not normal
 
-hist(fliesframe$longevity)
-qqnorm(fliesframe$longevity)
-qqline(fliesframe$longevity)
+hist(fliesframe$loglongevity)
+qqnorm(fliesframe$loglongevity)
+qqline(fliesframe$loglongevity)
 shapiro.test(fliesframe$longevity)
 #Doubtful normality. Probably not normal but shapiro says could be normal
 
@@ -100,7 +100,7 @@ fliesframe$thorax = as.factor(fliesframe$thorax)
 #T7
 contrasts(fliesframe$thorax)=contr.sum
 contrasts(fliesframe$activity)=contr.sum
-fliesanova2 = lm(loglongevity~thorax*activity,data = fliesframe)
+fliesanova2 = lm(loglongevity~thorax+activity,data = fliesframe)
 summary(fliesanova2)
 
 
@@ -118,9 +118,9 @@ flieslow
 
 #Probably not graphically relevant...
   
-plot(flieshigh$thorax,flieshigh$loglongevity)
-plot(fliesisolated$thorax,fliesisolated$loglongevity)
-plot(flieslow$thorax,flieslow$loglongevity)
+plot(flieshigh$thorax,flieshigh$loglongevity,main="High activity with loglongevity")
+plot(fliesisolated$thorax,fliesisolated$loglongevity,main="Isolated activity with loglongevity")
+plot(flieslow$thorax,flieslow$loglongevity,main="Low activity with loglongevity")
 
 fliesframe$thorax = as.factor(fliesframe$thorax)
 boxplot(loglongevity~thorax+activity,data=fliesframe)
@@ -147,7 +147,6 @@ plot(fitted(fliesanova2),residuals(fliesanova2))
 #T10
 fliesframe$activity=as.factor(fliesframe$longevity)
 fliesaov = lm(longevity~thorax+activity,data=fliesframe)
-anova(fliesaov)
 drop1(fliesaov,type="F")
 
 qqnorm(residuals(fliesanova))
