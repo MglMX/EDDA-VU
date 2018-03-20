@@ -15,6 +15,11 @@ hist(usepsi$gpa, breaks = c(2.0, 2.5, 3.0, 3.5, 4.0, 4.5), xlab="GPA", ylab="N o
 
 boxplot(expsi$gpa, usepsi$gpa, nousepsi$gpa, main="GPA Boxplots", names=c("All", "PSI", "No PSI"));
 
+qqnorm(nousepsi$gpa,  main="Q-Q Plot of Student's GPA without PSI") # doesn't look normal
+qqline(nousepsi$gpa, col="red")
+
+qqnorm(usepsi$gpa, main="Q-Q Plot of Student's GPA receiving PSI") # looks normal
+qqline(usepsi$gpa, col="red")
 
 #T2
 
