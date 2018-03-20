@@ -26,6 +26,7 @@ qqline(nousepsi$gpa, col="red")
 qqnorm(usepsi$gpa, main="Q-Q Plot of Student's GPA receiving PSI") # looks normal
 qqline(usepsi$gpa, col="red")
 
+
 #T2
 
 expsiglm=glm(passed~psi+gpa,data=expsi,family=binomial)
@@ -38,18 +39,18 @@ summary(expsiglm)
 #and increases odds of passing by e^2.338=10.3604948382
 
 
+
+
 #T4
 
-expsi$passed=factor(expsi$passed)
-expsi$psi=factor(expsi$psi)
-expsi$gpa=factor(expsi$gpa)
-expsiglm2=glm(passed~psi+gpa, data=expsi,family=binomial)
-summary(expsiglm2)
+# with psi and gpa=3.0 --> -11.602+2.338+(3.063*3.0) = -0.075 =
+# without psi and gpa=3.0 --> -11.602+(3.063*3.0) = -2.408 =
 
-#estimations shown, I think intercept+psi1 + gpa3.0 would be the first estimation 
-#and intercept+gpa3.0 would be the second. 
 
 #T5
+
+expsiglm2=glm(passed~psi+gpa, data=expsi,family=binomial)
+summary(expsiglm2)
 
 #exp(intercept(which is supposedly psi0) − psi1?) = 1.786932. )
   
