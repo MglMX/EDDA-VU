@@ -8,6 +8,7 @@ pairs(africa_data)
 
 #T1
 
+
 n = c(10, 100, 1000)
 lambda = c(0.5, 1, 10, 100)
 
@@ -15,29 +16,27 @@ study_poisson <- function(n, lambda){
   rpois(n, lambda)
 }
 
-poisson_st = numeric(12)
+poisson_st = list()
 k = 1
 for(i in n){
   for(j in lambda){
-    poisson_st[k] = rpois(n, lambda)
-    k ++
+    print(i)
+    print(j)
+    print(rpois(i,j))
+    
+    poisson_st = c(poisson_st,list(rpois(i,j)))
+    
+    
+    
+    k = k +1
   }
 }
 
+x = poisson_st[1]
 hist(x)
 qqnorm(x)
+qqline(x)
 
-
-n <- 100
-n
-x <- rnorm(100)
-x
-lambda <- exp(1+x)
-lambda
-y <- rpois(n, lambda)
-y
-
-glm(y~x, family = poisson)
 
 # Need to modify. This was just for testing
 
