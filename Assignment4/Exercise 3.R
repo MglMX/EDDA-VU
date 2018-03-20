@@ -32,7 +32,90 @@ for(i in n){
   }
 }
 
-x = poisson_st[1]
+x = poisson_st[[1]]
+x
+hist(x)
+qqnorm(x)
+qqline(x)
+
+x = poisson_st[[2]]
+x
+hist(x)
+qqnorm(x)
+qqline(x)
+
+x = poisson_st[[3]]
+x
+hist(x)
+qqnorm(x)
+qqline(x)
+
+
+x = poisson_st[[4]]
+x
+hist(x)
+qqnorm(x)
+qqline(x)
+
+
+x = poisson_st[[5]]
+x
+hist(x)
+qqnorm(x)
+qqline(x)
+
+
+x = poisson_st[[6]]
+x
+hist(x)
+qqnorm(x)
+qqline(x)
+
+
+x = poisson_st[[7]]
+x
+hist(x)
+qqnorm(x)
+qqline(x)
+
+
+x = poisson_st[[8]]
+x
+hist(x)
+qqnorm(x)
+qqline(x)
+
+
+x = poisson_st[[9]]
+x
+hist(x)
+qqnorm(x)
+qqline(x)
+
+
+x = poisson_st[[10]]
+x
+hist(x)
+qqnorm(x)
+qqline(x)
+
+
+x = poisson_st[[11]]
+x
+hist(x)
+qqnorm(x)
+qqline(x)
+
+
+x = poisson_st[[12]]
+x
+hist(x)
+qqnorm(x)
+qqline(x)
+
+
+x = poisson_st[[2]]
+x
 hist(x)
 qqnorm(x)
 qqline(x)
