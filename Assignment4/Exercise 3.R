@@ -8,6 +8,26 @@ pairs(africa_data)
 
 #T1
 
+n = c(10, 100, 1000)
+lambda = c(0.5, 1, 10, 100)
+
+study_poisson <- function(n, lambda){
+  rpois(n, lambda)
+}
+
+poisson_st = numeric(12)
+k = 1
+for(i in n){
+  for(j in lambda){
+    poisson_st[k] = rpois(n, lambda)
+    k ++
+  }
+}
+
+hist(x)
+qqnorm(x)
+
+
 n <- 100
 n
 x <- rnorm(100)
@@ -25,6 +45,8 @@ glm(y~x, family = poisson)
 #T2
 
 # I don't understand it yet!!!
+
+
 
 
 #T3
