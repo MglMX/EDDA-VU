@@ -4,17 +4,13 @@ africa_data = read.table("africa.txt", header = TRUE)
 attach(africa_data)
 africa_data
 
-pairs(africa_data)
+# pairs(africa_data)
 
 #T1
 
 
 n = c(10, 100, 1000)
 lambda = c(0.5, 1, 10, 100)
-
-study_poisson <- function(n, lambda){
-  rpois(n, lambda)
-}
 
 poisson_st = list()
 k = 1
@@ -26,108 +22,143 @@ for(i in n){
     
     poisson_st = c(poisson_st,list(rpois(i,j)))
     
-    
-    
     k = k +1
   }
 }
 
 x = poisson_st[[1]]
 x
-hist(x)
-qqnorm(x)
-qqline(x)
+hist(x, main = "Histogram with n = 10 and lambda = 0.5")
+qqnorm(x, main = "n = 10 and lambda = 0.5")
+qqline(x, col = "red")
+
+## Not Normal
 
 x = poisson_st[[2]]
 x
-hist(x)
-qqnorm(x)
-qqline(x)
+hist(x, main = "Histogram with n = 10 and lambda = 1")
+qqnorm(x, main = "n = 10 and lambda = 1")
+qqline(x, col= "red")
+
+## Not Normal
 
 x = poisson_st[[3]]
 x
-hist(x)
-qqnorm(x)
-qqline(x)
+hist(x, main = "Histogram with n = 10 and lambda = 10")
+qqnorm(x, main = "n = 10 and lambda = 10")
+qqline(x, col= "red")
 
+## Not Normal
 
 x = poisson_st[[4]]
 x
-hist(x)
-qqnorm(x)
-qqline(x)
+hist(x, main = "Histogram with n = 10 and lambda = 100")
+qqnorm(x, main = "n = 10 and lambda = 100")
+qqline(x, col= "red")
 
+## Not Normal
 
 x = poisson_st[[5]]
 x
-hist(x)
-qqnorm(x)
-qqline(x)
+hist(x, main = "Histogram with n = 100 and lambda = 0.5")
+qqnorm(x, main = "n = 100 and lambda = 0.5")
+qqline(x, col= "red")
 
+## Not Normal
 
 x = poisson_st[[6]]
 x
-hist(x)
-qqnorm(x)
-qqline(x)
+hist(x, main = "Histogram with n = 100 and lambda = 1")
+qqnorm(x, main = "n = 100 and lambda = 1")
+qqline(x, col= "red")
 
+## Not
 
 x = poisson_st[[7]]
 x
-hist(x)
-qqnorm(x)
-qqline(x)
+hist(x, main = "Histogram with n = 100 and lambda = 10")
+qqnorm(x, main = "n = 100 and lambda = 10")
+qqline(x, col= "red")
 
+## Not  
 
 x = poisson_st[[8]]
 x
-hist(x)
-qqnorm(x)
-qqline(x)
+hist(x, main = "Histogram with n = 100 and lambda = 100")
+qqnorm(x, main = "n = 100 and lambda = 100")
+qqline(x, col= "red")
 
+## Normal both
 
 x = poisson_st[[9]]
 x
-hist(x)
-qqnorm(x)
-qqline(x)
+hist(x, main = "Histogram with n = 1000 and lambda = 0.5")
+qqnorm(x, main = "n = 1000 and lambda = 0.5")
+qqline(x, col= "red")
 
+## Not
 
 x = poisson_st[[10]]
 x
-hist(x)
-qqnorm(x)
-qqline(x)
+hist(x, main = "Histogram with n = 1000 and lambda = 1")
+qqnorm(x, main = "n = 1000 and lambda = 1")
+qqline(x, col= "red")
 
+## Not
 
 x = poisson_st[[11]]
 x
-hist(x)
-qqnorm(x)
-qqline(x)
+hist(x, main = "Histogram with n = 1000 and lambda = 10")
+qqnorm(x, main = "n = 1000 and lambda = 10")
+qqline(x, col= "red")
 
+## Hist - shows normally QQ- Not instead shows stepped pattern
 
 x = poisson_st[[12]]
 x
-hist(x)
-qqnorm(x)
-qqline(x)
+hist(x, main = "Histogram with n = 1000 and lambda = 100")
+qqnorm(x, main = "n = 1000 and lambda = 100")
+qqline(x, col= "red")
 
+## looks normal
 
-x = poisson_st[[2]]
-x
-hist(x)
-qqnorm(x)
-qqline(x)
-
-
-# Need to modify. This was just for testing
 
 
 #T2
 
-# I don't understand it yet!!!
 
+# Need to modify. This was just for testing
+par(mfrow=c(1,2))
+
+#Normal distribution with mu = 100 and variance = sqrt(100)
+h = rnorm(1000, 100, sqrt(100))
+
+hist(h)
+qqnorm(h)
+
+# Poisson distribution with n = 1000 and lambda = 100
+
+x = poisson_st[[12]]
+x
+hist(x, main = "Histogram with n = 1000 and lambda = 100")
+qqnorm(x, main = "n = 1000 and lambda = 100")
+qqline(x, col= "red")
+
+
+#Normal distribution with mu = 1 and variance = sqrt(1)
+h = rnorm(1000, 1, sqrt(1))
+
+hist(h)
+qqnorm(h)
+
+# Poisson distribution with n = 1000 and lambda = 1
+
+x = poisson_st[[10]]
+x
+hist(x, main = "Histogram with n = 1000 and lambda = 1")
+qqnorm(x, main = "n = 1000 and lambda = 1")
+qqline(x, col= "red")
+## If we com
 
 
 
