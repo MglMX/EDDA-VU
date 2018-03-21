@@ -1,0 +1,19 @@
+---
+title: "Exam"
+author: "Tanjina Islam, Miguel Morales Expósito and Carlos Perales Liñan, group 12"
+date: "21 March 2018"
+output:
+  pdf_document:
+    fig_caption: yes
+fontsize: 11pt
+highlight: tango
+---
+```{r,echo=FALSE, warning=FALSE,results='hide',message=FALSE}
+options(digits = 3) #Showing only 3 decimals
+library(multcomp)
+library(lme4)
+```
+
+
+## Exercise 1
+
