@@ -83,3 +83,15 @@ summary(modlog1)
 
 ######################## END  Task 7 #########################################
 
+## Task 8
+
+round(cooks.distance(modlog1), 2)
+plot(cooks.distance(modlog1))
+qqnorm(residuals(modlog1))
+plot(residuals(modlog1), fitted(modlog1))
+
+## Since there is no data point with a Cook's distance that is close to or larger than 1, we can conclude that there is no influence point.
+## We can see that the QQ-plot showd normality 
+## And the residulas plot looks scatter but doesn't follow any specific structure.
+
+######################## END  Task 8 #########################################
