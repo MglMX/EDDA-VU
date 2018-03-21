@@ -65,8 +65,8 @@ summary(fliesanova)
 ```
 According to the estimates longevity increases with sexual activity. 
 ..* High activity =  3.602
-..* Low activity =  3.602 - 0.517 = 3.085
-..* Isolated =  3.602 - 0.397 = 3.205
+..* Low activity =  3.602 + 0.517 = 4.119
+..* Isolated =  3.602 + 0.397 = 3.999
 
 
 ### Task 5
