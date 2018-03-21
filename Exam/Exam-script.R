@@ -42,3 +42,18 @@ plot(log(fitted(gala_glm)), residuals(gala_glm, type = "response"))
 ## The response residuals increase with log of the fitted values as expected from Poisson model
 
 ######################## END  Task 3 #########################################
+
+
+## Task 5
+
+par(mfrow=c(2,3))
+for (i in 1:6) hist(gala_data[,i],main=colnames(gala_data)[i],xlab="",ylab="")
+pairs(gala_data)
+for (i in 1:6) hist(log(gala_data[,i]),main=colnames(gala_data)[i],xlab="",ylab="")
+pairs(log(gala_data))
+
+## If we look into the histograms then for the first one (without logarithm), we see that the histograms show the pattern of poisson distribution
+## but when we applied logarithm in the second version we see that they are approximately equal to a normal distribution.
+
+## If we look into the pairs then for the first one we see that, the data doesn't look significant to make any conclusion but when we applied the lograthim and cheked the pairs then we can see the data get more scattered and we can find some colinearity between Species~Area, Species~Elevation and Area~Elevation and there might be some colinearity between Nearest~Scruz but it's not obvious.
+## In summary by applying the this we tried to normalize the distribution and we get more relevant information.
