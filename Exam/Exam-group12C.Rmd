@@ -19,9 +19,6 @@ library(lme4)
 
 
 
-
-###Task 2
-
 ###Task 2
 
 ```{r}
@@ -34,29 +31,29 @@ With this method, we start with all of the possible variables in our model. Then
 
 ```{r}
 
-galalm=lm(sqrt(Species)~Area+Elevation+Nearest+Scruz+Adjacent,data=galapagos) 
-summary(galalm)[[4]]
+galaglm=glm(sqrt(Species)~Area+Elevation+Nearest+Scruz+Adjacent,data=galapagos)
+summary(galaglm)
 ```
 
-The variable Nearest has the highest p-value with a p-value of [`r summary(galalm)[[4]][22]`]. Since this p-value is bigger than 0.05, we discard it for our model and continue to the next iteration.
+The variable Nearest has the highest p-value with a p-value of 0.607. Since this p-value is bigger than 0.05, we discard it for our model and continue to the next iteration.
 
 ```{r}
-galalm=lm(sqrt(Species)~Area+Elevation+Scruz+Adjacent,data=galapagos) 
-summary(galalm)[[4]]
+galaglm=glm(sqrt(Species)~Area+Elevation+Scruz+Adjacent,data=galapagos) 
+summary(galaglm)
 ```
 
-The variable Scruz has the highest p-value with a p-value of [`r summary(galalm)[[4]][19]`]. Since this p-value is bigger than 0.05, we discard it for our model and continue to the next iteration.
+The variable Scruz has the highest p-value with a p-value of 0.1837. Since this p-value is bigger than 0.05, we discard it for our model and continue to the next iteration.
 
 ```{r}
-galalm=lm(sqrt(Species)~Area+Elevation+Adjacent,data=galapagos) 
-summary(galalm)[[4]]
+galaglm=glm(sqrt(Species)~Area+Elevation+Adjacent,data=galapagos) 
+summary(galaglm)
 ```
 
-The variable Area has the highest p-value with a p-value of [`r summary(galalm)[[4]][14]`]. Since the p-value is bigger than 0.05, we discard it for our model and continue to the next iteration.
+The variable Area has the highest p-value with a p-value of 0.0639. Since the p-value is bigger than 0.05, we discard it for our model and continue to the next iteration.
 
 ```{r}
-galalm=lm(sqrt(Species)~Elevation+Adjacent,data=galapagos) 
-summary(galalm)[[4]]
+galaglm=glm(sqrt(Species)~Elevation+Adjacent,data=galapagos) 
+summary(galaglm)
 ```
 
 As we can see, all the p-values are smaller than 0.05, thus meaning that all the variables are significant for our model.
