@@ -63,7 +63,7 @@ We get a p-value 1.798e-07, therefore, H0 is reject so we can say that sexual ac
 ```{r}
 summary(fliesanova)
 ```
-According to the estimates longevity increases with sexual activity. 
+According to the estimates longevity increases more when the sexual activity is low. 
 ..* High activity =  3.602
 ..* Low activity =  3.602 + 0.517 = 4.119
 ..* Isolated =  3.602 + 0.397 = 3.999
