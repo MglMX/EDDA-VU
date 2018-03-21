@@ -17,6 +17,11 @@ Species = 3.15 - 5.80e-04 * Area +   3.54e-03  * Elevation + 8.83e-03 * Nearest 
 
 ######################## END  Task 1 #########################################
 
+##TASK 2
+
+
+######################## END  Task 2 #########################################
+
 ## Task 3
 
 ## Plots: Fitted vs Residuals
@@ -57,3 +62,17 @@ pairs(log(gala_data))
 
 ## If we look into the pairs then for the first one we see that, the data doesn't look significant to make any conclusion but when we applied the lograthim and cheked the pairs then we can see the data get more scattered and we can find some colinearity between Species~Area, Species~Elevation and Area~Elevation and there might be some colinearity between Nearest~Scruz but it's not obvious.
 ## In summary by applying the this we tried to normalize the distribution and we get more relevant information.
+
+######################## END  Task 5 #########################################
+
+## Task 6
+
+modlog=lm(log(Species)~log(Area)+log(Elevation)+log(Nearest)+log(Scruz+1)+log(Adjacent),data=gala_data)
+summary(modlog)
+
+modlog1=step(modlog)
+summary(modlog1)
+
+## if we look into the summary of modlog1 then we can see that log(Scruz + 1) has a p-value =  0.17 > 0.05. So maybe this variable is not significant but we are not sure whether AIC follows the exact same criteria in selecting a model.
+
+######################## END  Task 6 #########################################
