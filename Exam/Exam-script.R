@@ -95,3 +95,16 @@ plot(residuals(modlog1), fitted(modlog1))
 ## And the residulas plot looks scatter but doesn't follow any specific structure.
 
 ######################## END  Task 8 #########################################
+
+
+## Task 9
+
+gala_data$logElevation = log(gala_data$Elevation)
+gala_data$logArea = log(gala_data$Area)
+gala_data$logScruz = log(gala_data$Scruz + 1)
+
+modlog2 = lm(log(Species)~logArea+logElevation+logScruz,data = gala_data)
+
+pairs(gala_data)
+
+######################## END  Task 9 #########################################
