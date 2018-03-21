@@ -76,3 +76,10 @@ summary(modlog1)
 ## if we look into the summary of modlog1 then we can see that log(Scruz + 1) has a p-value =  0.17 > 0.05. So maybe this variable is not significant but we are not sure whether AIC follows the exact same criteria in selecting a model.
 
 ######################## END  Task 6 #########################################
+
+## Task 7
+
+## When we apply the logarithm we normalized the data and we found colinearity between Spices and Area. And if we consider them without logarithm we do not really see any colinearity between them. By the definition of Species we get that we are counting the number of specifes in an island which follows Poissons regression model. Since Poisson uses logarithm to get the linear function so it makes more logical to apply logarithm to model log(Species) as a linear function of log(Area) than Species as a linear function of Area.
+
+######################## END  Task 7 #########################################
+
