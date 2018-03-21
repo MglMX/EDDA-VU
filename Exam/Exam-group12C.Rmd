@@ -1,0 +1,67 @@
+---
+title: "Exam"
+author: "Tanjina Islam, Miguel Morales Expósito and Carlos Perales Liñan, group 12"
+date: "21 March 2018"
+output:
+  pdf_document:
+    fig_caption: yes
+fontsize: 11pt
+highlight: tango
+---
+```{r,echo=FALSE, warning=FALSE,results='hide',message=FALSE}
+options(digits = 3) #Showing only 3 decimals
+library(multcomp)
+library(lme4)
+```
+
+
+## Exercise 1
+
+
+
+
+###Task 2
+
+###Task 2
+
+```{r}
+galapagos=read.table("gala.txt", header=TRUE)
+
+```
+
+
+With this method, we start with all of the possible variables in our model. Then, we choose the one that gives the highest p-value. If this p-value is bigger than 0.05, we will discard the variable and repeat the process without it.
+
+```{r}
+
+galalm=lm(sqrt(Species)~Area+Elevation+Nearest+Scruz+Adjacent,data=galapagos) 
+summary(galalm)[[4]]
+```
+
+The variable Nearest has the highest p-value with a p-value of [`r summary(galalm)[[4]][22]`]. Since this p-value is bigger than 0.05, we discard it for our model and continue to the next iteration.
+
+```{r}
+galalm=lm(sqrt(Species)~Area+Elevation+Scruz+Adjacent,data=galapagos) 
+summary(galalm)[[4]]
+```
+
+The variable Scruz has the highest p-value with a p-value of [`r summary(galalm)[[4]][19]`]. Since this p-value is bigger than 0.05, we discard it for our model and continue to the next iteration.
+
+```{r}
+galalm=lm(sqrt(Species)~Area+Elevation+Adjacent,data=galapagos) 
+summary(galalm)[[4]]
+```
+
+The variable Area has the highest p-value with a p-value of [`r summary(galalm)[[4]][14]`]. Since the p-value is bigger than 0.05, we discard it for our model and continue to the next iteration.
+
+```{r}
+galalm=lm(sqrt(Species)~Elevation+Adjacent,data=galapagos) 
+summary(galalm)[[4]]
+```
+
+As we can see, all the p-values are smaller than 0.05, thus meaning that all the variables are significant for our model.
+
+
+The resulting model of the step-down method is:
+  
+  sqrt(Species) = 3.5379 + 0.012942\*Elevation -0.00289\*Adjacent + error
