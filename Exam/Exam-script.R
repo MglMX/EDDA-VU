@@ -19,6 +19,16 @@ Species = 3.15 - 5.80e-04 * Area +   3.54e-03  * Elevation + 8.83e-03 * Nearest 
 
 ##TASK 2
 
+gala_glm_sqrt = glm(sqrt(Species)~Area+Elevation+Nearest+Scruz+Adjacent,family=poisson,data=gala_data)
+summary(gala_glm_sqrt)
+
+gala_glm_sqrt=glm(sqrt(Species)~Area+Elevation+Scruz+Adjacent,family=poisson,data=gala_data) 
+summary(gala_glm_sqrt)
+
+gala_glm_sqrt=glm(sqrt(Species)~Area+Elevation+Adjacent,family=poisson,data=gala_data) 
+summary(gala_glm_sqrt)
+
+sqrt(Species) = 1.314e+00 -3.262e-04 * Area + 2.018e-03 * Elevation -3.987e-04 * Adjacent + error
 
 ######################## END  Task 2 #########################################
 
@@ -47,6 +57,21 @@ plot(log(fitted(gala_glm)), residuals(gala_glm, type = "response"))
 ## The response residuals increase with log of the fitted values as expected from Poisson model
 
 ######################## END  Task 3 #########################################
+
+
+## Task 4
+
+
+
+round(cooks.distance(gala_glm_sqrt), 2)
+plot(cooks.distance(gala_glm_sqrt))
+
+# Here we clearly have encountered an influence point: the Cook’s distance is 27.93 that refers to "Isabela" as the potential point.
+# If this Island is removed then we will not get any influential point from Cook's distance since except "Isabela" Since there is no data point with a Cook's distance that is close to or larger than 1 rather than Isablea = 27.93. 
+# we can conclude that there will be no influence point if we remove it from the model.
+
+
+######################## END  Task 4 #########################################
 
 
 ## Task 5
@@ -91,7 +116,7 @@ qqnorm(residuals(modlog1))
 plot(residuals(modlog1), fitted(modlog1))
 
 ## Since there is no data point with a Cook's distance that is close to or larger than 1, we can conclude that there is no influence point.
-## We can see that the QQ-plot showd normality 
+## We can see that the QQ-plot showed normality 
 ## And the residulas plot looks scatter but doesn't follow any specific structure.
 
 ######################## END  Task 8 #########################################
