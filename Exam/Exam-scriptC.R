@@ -46,29 +46,30 @@ Species = 1.4329 + 0.2766 * Elevation - 0.0689 * Adjacent + error
 
 ##TASK 2
 
+###Task 2
+
 galapagos=read.table("gala.txt", header=TRUE)
 
-galalm=lm(sqrt(Species)~Area+Elevation+Nearest+Scruz+Adjacent,data=galapagos) 
-summary(galalm)[[4]]
 
-#The variable Nearest has the highest p-value with a p-value of [`r summary(galalm)[[4]][22]`]. Since this p-value is bigger than 0.05, we discard it for our model and continue to the next iteration.
+#With this method, we start with all of the possible variables in our model. Then, we choose the one that gives the highest p-value. If this p-value is bigger than 0.05, we will discard the variable and repeat the process without it.
 
-galalm=lm(sqrt(Species)~Area+Elevation+Scruz+Adjacent,data=galapagos) 
-summary(galalm)[[4]]
 
-#The variable Scruz has the highest p-value with a p-value of [`r summary(galalm)[[4]][19]`]. Since this p-value is bigger than 0.05, we discard it for our model and continue to the next iteration.
+galaglm=glm(sqrt(Species)~Area+Elevation+Nearest+Scruz+Adjacent,family=poisson,data=galapagos)
+summary(galaglm)
 
-galalm=lm(sqrt(Species)~Area+Elevation+Adjacent,data=galapagos) 
-summary(galalm)[[4]]
+#The variable Nearest has the highest p-value with a p-value of 0.411. Since this p-value is bigger than 0.05, we discard it for our model and continue to the next iteration.
 
-#The variable Area has the highest p-value with a p-value of [`r summary(galalm)[[4]][14]`]. Since the p-value is bigger than 0.05, we discard it for our model and continue to the next iteration.
+galaglm=glm(sqrt(Species)~Area+Elevation+Scruz+Adjacent,family=poisson,data=galapagos) 
+summary(galaglm)
 
-galalm=lm(sqrt(Species)~Elevation+Adjacent,data=galapagos) 
-summary(galalm)[[4]]
+#The variable Scruz has the highest p-value with a p-value of 0.2466. Since this p-value is bigger than 0.05, we discard it for our model and continue to the next iteration.
+
+galaglm=glm(sqrt(Species)~Area+Elevation+Adjacent,family=poisson,data=galapagos) 
+summary(galaglm)
 
 #As we can see, all the p-values are smaller than 0.05, thus meaning that all the variables are significant for our model.
 
 
 #The resulting model of the step-down method is:
   
-#sqrt(Species) = 3.5379 + 0.012942\*Elevation -0.00289\*Adjacent + error
+#sqrt(Species) = 1.314e+00 + -3.262e-04\*Area + 2.018e-03\*Elevation -3.987e-04\*Adjacent + error

@@ -31,28 +31,21 @@ With this method, we start with all of the possible variables in our model. Then
 
 ```{r}
 
-galaglm=glm(sqrt(Species)~Area+Elevation+Nearest+Scruz+Adjacent,data=galapagos)
+galaglm=glm(sqrt(Species)~Area+Elevation+Nearest+Scruz+Adjacent,family=poisson,data=galapagos)
 summary(galaglm)
 ```
 
-The variable Nearest has the highest p-value with a p-value of 0.607. Since this p-value is bigger than 0.05, we discard it for our model and continue to the next iteration.
+The variable Nearest has the highest p-value with a p-value of 0.411. Since this p-value is bigger than 0.05, we discard it for our model and continue to the next iteration.
 
 ```{r}
-galaglm=glm(sqrt(Species)~Area+Elevation+Scruz+Adjacent,data=galapagos) 
+galaglm=glm(sqrt(Species)~Area+Elevation+Scruz+Adjacent,family=poisson,data=galapagos) 
 summary(galaglm)
 ```
 
-The variable Scruz has the highest p-value with a p-value of 0.1837. Since this p-value is bigger than 0.05, we discard it for our model and continue to the next iteration.
+The variable Scruz has the highest p-value with a p-value of 0.2466. Since this p-value is bigger than 0.05, we discard it for our model and continue to the next iteration.
 
 ```{r}
-galaglm=glm(sqrt(Species)~Area+Elevation+Adjacent,data=galapagos) 
-summary(galaglm)
-```
-
-The variable Area has the highest p-value with a p-value of 0.0639. Since the p-value is bigger than 0.05, we discard it for our model and continue to the next iteration.
-
-```{r}
-galaglm=glm(sqrt(Species)~Elevation+Adjacent,data=galapagos) 
+galaglm=glm(sqrt(Species)~Area+Elevation+Adjacent,family=poisson,data=galapagos) 
 summary(galaglm)
 ```
 
@@ -61,4 +54,4 @@ As we can see, all the p-values are smaller than 0.05, thus meaning that all the
 
 The resulting model of the step-down method is:
   
-  sqrt(Species) = 3.5379 + 0.012942\*Elevation -0.00289\*Adjacent + error
+sqrt(Species) = 1.314e+00 + -3.262e-04\*Area + 2.018e-03\*Elevation -3.987e-04\*Adjacent + error
