@@ -52,10 +52,10 @@ The population of loglongevity does not seem normal.
 
 We perfom an anova just considering the sexual activity
 ```{r}
-fliesanova = lm(longevity~activity,data=fliesframe)
+fliesanova = lm(loglongevity~activity,data=fliesframe)
 anova(fliesanova)
 ```
-We get a p-value 1.931e-07, therefore, H0 is reject so we can say that sexual activity affects the longevity of the flies.
+We get a p-value 1.798e-07, therefore, H0 is reject so we can say that sexual activity affects the longevity of the flies.
 
 
 ### Task 4
@@ -64,9 +64,9 @@ We get a p-value 1.931e-07, therefore, H0 is reject so we can say that sexual ac
 summary(fliesanova)
 ```
 According to the estimates longevity increases with sexual activity. 
-..* High activity 38.72
-..* Low activity 38.72 - 24.84 = 3.94
-..* Isolated 38.72 - 18 = 20.72
+..* High activity =  3.602
+..* Low activity =  3.602 - 0.517 = 3.085
+..* Isolated =  3.602 - 0.397 = 3.205
 
 
 ### Task 5
