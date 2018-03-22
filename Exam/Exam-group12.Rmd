@@ -17,3 +17,194 @@ library(lme4)
 
 ## Exercise 1
 
+First of all, we load the data from the data source.
+```{r, warning=FALSE}
+gala_data = read.table("gala.txt", header = TRUE)
+```
+
+
+###Task 1
+
+```{r}
+gala_glm = glm(Species~Area+Elevation+Nearest+Scruz+Adjacent, family= poisson, data = gala_data)
+summary(gala_glm)
+```
+As we can see, all the p-values are smaller than 0.05 now. Therefore, all the variables are significant for our model.
+
+The resulting model of the step-down method is:
+
+Species = 3.15 - 5.80e-04 \* Area +   3.54e-03  \* Elevation + 8.83e-03 \* Nearest - 5.71e-03 \* Scruz - 6.63e-04 \* Adjacent + error
+
+
+
+###Task 2
+
+```{r, warning=FALSE}
+
+galaglm=glm(sqrt(Species)~Area+Elevation+Nearest+Scruz+Adjacent,family=poisson,data=gala_data)
+summary(galaglm)
+```
+
+The variable Nearest has the highest p-value with a p-value of 0.411. Since this p-value is bigger than 0.05, we discard it for our model and continue to the next iteration.
+
+```{r, warning=FALSE}
+galaglm=glm(sqrt(Species)~Area+Elevation+Scruz+Adjacent,family=poisson,data=gala_data) 
+summary(galaglm)
+```
+
+The variable Scruz has the highest p-value with a p-value of 0.2466. Since this p-value is bigger than 0.05, we discard it for our model and continue to the next iteration.
+
+```{r, warning=FALSE}
+galaglm=glm(sqrt(Species)~Area+Elevation+Adjacent,family=poisson,data=gala_data) 
+summary(galaglm)
+```
+
+As we can see, all the p-values are smaller than 0.05, thus meaning that all the variables are significant for our model.
+
+
+The resulting model of the step-down method is:
+  
+sqrt(Species) = 1.314 - 3.262e-04\*Area + 2.018e-03\*Elevation - 3.987e-04\*Adjacent + error
+
+
+###Task 3
+
+#### Plots: Fitted vs Residuals
+
+```{r}
+plot(fitted(gala_glm), residuals(gala_glm)) 
+plot(fitted(galaglm), residuals(galaglm)) 
+
+```
+
+Both plots show no specific pattern. They're scatter plots, not visually good as it would suppose to be in linear regression model.
+
+
+#### Plots: Logarithmic-Fitted values vs Residuals
+
+```{r}
+plot(log(fitted(gala_glm)), residuals(gala_glm))
+plot(log(fitted(galaglm)), residuals(galaglm))
+```
+We took logarithm to make the x-values fitted by a linear function in the plots. Both plots seem OK yet still no specific pattern. In addition to this, they also look scattered.
+
+
+#### Plots: Logarithmic-Fitted values vs Residuals with type = Response
+
+```{r}
+plot(log(fitted(gala_glm)), residuals(gala_glm, type = "response"))
+plot(log(fitted(galaglm)), residuals(galaglm, type = "response"))
+```
+With the first model's plot, we can see that the response residuals clearly increase with log of the fitted values as expected from Poisson model. However, we can't quite say the same from the second model.
+
+
+In conclussion, both models show very similar characteristics when looking at the plots. Considering the last plot, we conclude that the fisrt model looks better than the sqrt model. Therefore, we believe this model is better despite the similarities between them on the other aspects.
+
+
+
+###Task 4
+
+```{r}
+round(cooks.distance(galaglm), 2)
+plot(cooks.distance(galaglm))
+```
+
+Here we clearly have encountered an influence point: the Cook’s distance is 27.93 that refers to "Isabela" as the potential point.
+
+If this Island is removed, then we will not get any influential points from Cook's distance except "Isabela", since there is no data point with a Cook's distance that is close to or larger than 1 rather than Isablea = 27.93. 
+
+
+Therefore, we can conclude that there will be no influence point if we remove it from the model.
+
+
+
+###Task 5
+
+```{r}
+par(mfrow=c(2,3))
+for (i in 1:6) hist(gala_data[,i],main=colnames(gala_data)[i],xlab="",ylab="")
+pairs(gala_data)
+for (i in 1:6) hist(log(gala_data[,i]),main=colnames(gala_data)[i],xlab="",ylab="")
+par(mfrow=c(1,1))
+pairs(log(gala_data))
+
+
+```
+
+If we look into the histograms, for the first one (without log), we see that the histograms show the pattern of a poisson distribution as expected. On the other hand, when we applied logarithm in the second version, we see that they are approximately equal to a normal distribution.
+
+
+If we look into the pairs then for the first one we see that, the data doesn't look significant to make any conclusion. However, when we applied the lograthim and cheked the pairs then we can see the data get more scattered and we can find some colinearity between Species~Area, Species~Elevation and Area~Elevation and there might be some colinearity between Nearest~Scruz, but it's not obvious.
+
+
+In summary, by applying the this we tried to normalize the distribution and we get more relevant information.
+
+
+
+###Task 6
+
+```{r, results='hide'}
+modlog=lm(log(Species)~log(Area)+log(Elevation)+log(Nearest)+log(Scruz+1)+log(Adjacent),data=gala_data)
+modlog1=step(modlog)
+
+```
+
+```{r}
+summary(modlog1)
+```
+
+If we look into the summary of modlog1, we can see that log(Scruz + 1) has a p-value =  0.17 > 0.05. So maybe this variable is not significant but we are not sure whether AIC follows the exact same criteria in selecting a model. The same way step-up only follows the R-squared values, we think that the p-values might not be relevant to determine the final fitness of AIC.
+
+
+
+###Task 7
+
+When we apply the logarithm, we normalized the data and we found collinearity between Spices and Area. 
+In addition to this, if we consider them without logarithm we do not really see any colinearity between them. 
+By the definition of Species, we get that we are counting the number of specifes in an island which follows Poissons regression model. Since Poisson uses logarithm to get the linear function, it makes more sense to apply logarithm to model log(Species) as a linear function of log(Area) than Species as a linear function of Area.
+
+
+###Task 8
+
+```{r}
+round(cooks.distance(modlog1), 2)
+plot(cooks.distance(modlog1))
+qqnorm(residuals(modlog1))
+plot(residuals(modlog1), fitted(modlog1))
+
+```
+
+Since we can see that there are no data point with a Cook's distance close to or larger than 1, we can conclude that there is no influence point.
+We can see that the QQ-plot shows normality and the residuals plot looks scattered but doesn't follow any specific structure.
+
+
+###Task 9
+
+To investigate collinearity problems, we first have to check the pairs with the scatter plot.
+
+```{r}
+gala_data$logElevation = log(gala_data$Elevation)
+gala_data$logArea = log(gala_data$Area)
+gala_data$logScruz = log(gala_data$Scruz + 1)
+
+modlog2 = lm(log(Species)~logArea+logElevation+logScruz,data = gala_data)
+
+pairs(gala_data)
+```
+Here we can see that the variables "logElevation" and "logArea" look somewhat collinear. We will now check the linear correlation between both.
+
+```{r}
+round(cor(gala_data[,7:8]),2)
+```
+
+As suspected, both variables are collinear with [`r round(cor(gala_data[,7:8]),2)[[2]]`]. 
+It's not useful to include interaction between these two variables in the same model. 
+
+###Task10
+
+We can discard modlog2 because it contains two variables that are collinear (logElevation and logArea), so it's not useful to fit them in the same model.
+
+
+For modlog1, it seems that one of the variables that we are considering is not so significant according to the p-value. The model we considered in exercise1 has too many variables.
+
+So finally, we think we should consider the model with sqrt(Species) because it has less explanatory variables, all the variables seem relevant and intuitively this model makes sense.
