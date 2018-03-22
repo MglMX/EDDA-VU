@@ -76,12 +76,13 @@ We make a 2-way anova.
 fliesframe$activity = as.factor(fliesframe$activity)
 fliesframe$thorax = as.factor(fliesframe$thorax)
 
-fliesanova2 = lm(loglongevity~activity+thorax,data = fliesframe) #Should I use * or +
+fliesanova2 = lm(loglongevity~activity+thorax,data = fliesframe) 
 anova(fliesanova2)
 ```
 We obtain a p-value of 1.141e-13, therefore, we can say that activity has a main effect on longevity when we consider the thorax length.
 
 ### Task 6
+
 First we calculate the average thorax length.
 ```{r}
 fliesframe$thorax = as.numeric(fliesframe$thorax)
@@ -96,9 +97,10 @@ We obtain the summary.
 ```{r}
 contrasts(fliesframe$thorax)=contr.sum
 contrasts(fliesframe$activity)=contr.sum
+fliesanova2 = lm(loglongevity~activity+thorax,data = fliesframe) 
 summary(fliesanova2)
 ```
-With the values thorax9 = 0.312 (for the acerage thorax length) and isolated-activity = -0.275, low-activity = 0.186 and high-activity = -(-0.275+0.186) = 0.089, we calculate the estimates for flies with average thorax..
+With the values thorax9 = 0.312 (for the average thorax length) and isolated-activity = -0.275, low-activity = 0.186 and high-activity = -(-0.275+0.186) = 0.089, we calculate the estimates for flies with average thorax..
 
 Y~isolated,thorax9~ = 3.802 + 0.312 - 0.275 = 3.839
 Y~low,thorax9~ = 3.802 + 0.312 + 0.186 = 4.3
@@ -121,7 +123,7 @@ fliesisolated = fliesframe[which(fliesframe$activity=="isolated"),]
 flieslow = fliesframe[which(fliesframe$activity=="low"),]
 ```
 
-Now we plot the thorax length agains the loglongevity.
+Now we plot the thorax length against the loglongevity.
 ```{r}
 plot(flieshigh$thorax,flieshigh$loglongevity,main="High activity with loglongevity")
 plot(fliesisolated$thorax,fliesisolated$loglongevity,main="Isolated activity with loglongevity")
@@ -131,7 +133,10 @@ We see that longevity increases with thorax length. We get higher longevity valu
 
 ### Task 8
 
-The analysis with the thorax length should not be included because there should not be interaction between the sexual activity and the thorax length. This is because the experimenters randomly chose the sexual activity that the flies were going to have.
+The analysis with the thorax length should not be included because there is no real interaction between the sexual activity and the thorax length. 
+
+
+This is because the experimenters randomly chose the sexual activity that the flies were going to have. Thus, we cannot conclude whether the thorax length will really influence in the sexual activity of the fly.
 
 
 ### Task 9
@@ -160,12 +165,14 @@ drop1(fliesaov,type="F")
 qqnorm(residuals(fliesanova))
 qqline(residuals(fliesanova))
 ```
-The normality s doubtful. But it could be normal. It seems more normal than when using the logaritmic value of longevity.
+The normality is doubtful. However, it could be normal. It seems more normal than when using the logaritmic value of longevity.
 
 ```{r}
 plot(fitted(fliesanova),residuals(fliesanova))
 ```
 We cannot judge becasue the values are not spread in the x axis. This is a prove that using the logarithmic value was a good idea.
+
+
 
 ## Exercise 2
 
@@ -235,9 +242,24 @@ Probability = 1/(1 + e^0.075) = 0.4812588
 Probability = 1/(1 + e^2.408) = 0.08256469
 
 
+
 ### Task 5
 
-exp(intercept(which is supposedly psi0) − psi1?) = 1.786932. )
+We can also get these probabilities with the help of the summary in task 2.
+
+*With psi:* 
+
+Probability = 1/(1 + e^11.602) = 9.15e-06
+
+
+*Without psi:* 
+
+-11.602 + 2.34 = -9.26 
+Probability = 1/(1 + e^9.26) = 9.51e-05
+
+
+*Difference of probabilities:* 9.51e-05 - 9.15e-06 = 8.59e-05
+
 
 
 ### Task 6
@@ -256,22 +278,18 @@ fisher.test(x)
 
 ```
 
-After running the Fisher test we can reach tot his conclusion: with p-value of [`r fisher.test(x)[[1]]`] we can reject the null hypothesis, which claims that the students receiving psi and the ones not receiving it have the same probablity of improvement.
+After running Fisher's test, we can conclude that with a p-value of [`r fisher.test(x)[[1]]`], we can reject the null hypothesis, which claims that the students receiving psi and the ones not receiving it have the same probablity of improvement.
 
 
 ### Task 7
 
-I guess it's okay? Fishers test works with this kind of experiments
-```{r}
-
-
-```
+We don't believe this approach is wrong, Fisher's test is a right approach for 2x2 tables with not too big numbers. We believe that this approach is valid since the experiment meet the requirements for its use.
 
 
 ### Task 8
 
 Fishers is good for small counts in each 2x2 table cell. 
-More exact than the other approach, ut it doesn't work with  big counts.
+More exact than the other approach, but it doesn't work with  big counts.
 
 
 
