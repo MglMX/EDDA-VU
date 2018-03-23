@@ -303,21 +303,17 @@ africa_data = read.table("africa.txt", header = TRUE)
 
 ### Task 1 
 
+We are going to create an array with 12 different poisson distributions. The distributions are combinations of the values n={10,100,1000} with lambda values l={0.5,1,10,100}.
+
 ```{r}
 n = c(10, 100, 1000)
 lambda = c(0.5, 1, 10, 100)
 
 poisson_st = list()
-k = 1
+
 for(i in n){
   for(j in lambda){
-    print(i)
-    print(j)
-    print(rpois(i,j))
-    
     poisson_st = c(poisson_st,list(rpois(i,j)))
-    
-    k = k +1
   }
 }
 
@@ -326,20 +322,17 @@ for(i in n){
 
 ```{r}
 x = poisson_st[[1]]
-x
 hist(x, main = "Histogram with n = 10 and lambda = 0.5")
 qqnorm(x, main = "n = 10 and lambda = 0.5")
-qqline(x, col = "red")
 ```
 
 The distribution doesn't look normal.
 
 ```{r}
 x = poisson_st[[2]]
-x
 hist(x, main = "Histogram with n = 10 and lambda = 1")
 qqnorm(x, main = "n = 10 and lambda = 1")
-qqline(x, col= "red")
+
 ```
 The distribution doesn't look normal.
 
@@ -347,10 +340,8 @@ The distribution doesn't look normal.
 
 ```{r}
 x = poisson_st[[3]]
-x
 hist(x, main = "Histogram with n = 10 and lambda = 10")
 qqnorm(x, main = "n = 10 and lambda = 10")
-qqline(x, col= "red")
 ```
 The distribution doesn't look normal.
 
@@ -362,99 +353,87 @@ hist(x, main = "Histogram with n = 10 and lambda = 100")
 qqnorm(x, main = "n = 10 and lambda = 100")
 qqline(x, col= "red")
 ```
-The distribution doesn't look normal.
+The histogram and QQ-plot resemble normality.
 
 
 ```{r}
 x = poisson_st[[5]]
-x
 hist(x, main = "Histogram with n = 100 and lambda = 0.5")
 qqnorm(x, main = "n = 100 and lambda = 0.5")
-qqline(x, col= "red")
 ```
 The distribution doesn't look normal.
 
 
 ```{r}
 x = poisson_st[[6]]
-x
 hist(x, main = "Histogram with n = 100 and lambda = 1")
 qqnorm(x, main = "n = 100 and lambda = 1")
-qqline(x, col= "red")
 ```
 The distribution doesn't look normal.
 
 
 ```{r}
 x = poisson_st[[7]]
-x
 hist(x, main = "Histogram with n = 100 and lambda = 10")
 qqnorm(x, main = "n = 100 and lambda = 10")
-qqline(x, col= "red")
 ```
 
-The distribution doesn't look normal.
+The histogram could be close to normal but the QQ-plot is not.
 
 
 
 ```{r}
 x = poisson_st[[8]]
-x
 hist(x, main = "Histogram with n = 100 and lambda = 100")
 qqnorm(x, main = "n = 100 and lambda = 100")
-qqline(x, col= "red")
 ```
 
-## Normal both
+The histogram looks normal but the QQ-plot seems to follow  a stepped pattern.
 
 ```{r}
 x = poisson_st[[9]]
-x
 hist(x, main = "Histogram with n = 1000 and lambda = 0.5")
 qqnorm(x, main = "n = 1000 and lambda = 0.5")
-qqline(x, col= "red")
 ```
 The distribution doesn't look normal.
 
 
 ```{r}
 x = poisson_st[[10]]
-x
 hist(x, main = "Histogram with n = 1000 and lambda = 1")
 qqnorm(x, main = "n = 1000 and lambda = 1")
-qqline(x, col= "red")
 ```
 The distribution doesn't look normal.
 
 
 ```{r}
 x = poisson_st[[11]]
-x
 hist(x, main = "Histogram with n = 1000 and lambda = 10")
 qqnorm(x, main = "n = 1000 and lambda = 10")
-qqline(x, col= "red")
 ```
 
-## Hist - shows normally QQ- Not instead shows stepped pattern
+Histogram shows normality but the QQ-plot shows a stepped pattern.
 
 ```{r}
 x = poisson_st[[12]]
-x
 hist(x, main = "Histogram with n = 1000 and lambda = 100")
 qqnorm(x, main = "n = 1000 and lambda = 100")
-qqline(x, col= "red")
 ```
-The distribution looks normal.
+Both histogram and QQ-plot show normality.
+
+#### Findings
+
+We can see from the previous histograms and QQ-plots that, when increasing the number of samples and lambda values of the Poisson distribution, the histograms look aproximately equal to normal distributions. However, looking at the QQ-plot we see that for some combinations of n and lambda (i.e n=10 l=100) they look normal but in most of the other combinations we see a stepped pattern. 
 
  
 
 ### Task 2
 
-The mean and variance of the Poisson distribution both equal lambda. Hence, thelarger the parameter, the larger the values of Y on average and the larger thespread in the values of Y.
+The mean and variance of the Poisson distribution both equal lambda. Hence, the larger the parameter, the larger the values of Y on average and the larger the spread in the values of Y.
 
-If we look into the Poisson distributions that we generated above in task 1, we can see that for larger lambda values we get a distribution which seems more like a normal distribution
+If we look into the Poisson distributions that we generated above in task 1, we can see that for larger lambda values we get a distribution which seems more like a normal distribution.
 
-In poisson regression, For each observation Y the parameter lambda is modelled differently, since the corresponding values will differ in general. The variances are different as well.
+In poisson regression, for each observation Y the parameter lambda is modelled differently, since the corresponding values will differ in general. The variances are different as well.
 
 Therefore, we believe that they're not in the same location-scale family.
 
