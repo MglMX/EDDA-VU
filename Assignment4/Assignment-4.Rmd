@@ -29,7 +29,6 @@ We add the logarithm of longevity in the data frame.
 
 ```{r}
 fliesframe = data.frame(thorax=flies$thorax,longevity=flies$longevity,activity=flies$activity,loglongevity=log(flies$longevity))
-fliesframe
 ```
 
 
