@@ -450,12 +450,15 @@ The distribution looks normal.
 
 ### Task 2
 
-```{r}
+The mean and variance of the Poisson distribution both equal lambda. Hence, thelarger the parameter, the larger the values of Y on average and the larger thespread in the values of Y.
+
+If we look into the Poisson distributions that we generated above in task 1, we can see that for larger lambda values we get a distribution which seems more like a normal distribution
+
+In poisson regression, For each observation Y the parameter lambda is modelled differently, since the corresponding values will differ in general. The variances are different as well.
+
+Therefore, we believe that they're not in the same location-scale family.
 
 
-```
-
-#### Findings: 
 
 ### Task 3
 
