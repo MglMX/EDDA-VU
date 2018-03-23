@@ -298,20 +298,155 @@ More exact than the other approach, but it doesn't work with  big counts.
 First of all, we load the data from the data source.
 ```{r}
 africa_data = read.table("africa.txt", header = TRUE)
-attach(africa_data)
 
 ```
 
 ### Task 1 
 
-
-
 ```{r}
+n = c(10, 100, 1000)
+lambda = c(0.5, 1, 10, 100)
 
+poisson_st = list()
+k = 1
+for(i in n){
+  for(j in lambda){
+    print(i)
+    print(j)
+    print(rpois(i,j))
+    
+    poisson_st = c(poisson_st,list(rpois(i,j)))
+    
+    k = k +1
+  }
+}
 
 ```
 
-#### Findings: 
+
+```{r}
+x = poisson_st[[1]]
+x
+hist(x, main = "Histogram with n = 10 and lambda = 0.5")
+qqnorm(x, main = "n = 10 and lambda = 0.5")
+qqline(x, col = "red")
+```
+
+The distribution doesn't look normal.
+
+```{r}
+x = poisson_st[[2]]
+x
+hist(x, main = "Histogram with n = 10 and lambda = 1")
+qqnorm(x, main = "n = 10 and lambda = 1")
+qqline(x, col= "red")
+```
+The distribution doesn't look normal.
+
+
+
+```{r}
+x = poisson_st[[3]]
+x
+hist(x, main = "Histogram with n = 10 and lambda = 10")
+qqnorm(x, main = "n = 10 and lambda = 10")
+qqline(x, col= "red")
+```
+The distribution doesn't look normal.
+
+
+```{r}
+x = poisson_st[[4]]
+x
+hist(x, main = "Histogram with n = 10 and lambda = 100")
+qqnorm(x, main = "n = 10 and lambda = 100")
+qqline(x, col= "red")
+```
+The distribution doesn't look normal.
+
+
+```{r}
+x = poisson_st[[5]]
+x
+hist(x, main = "Histogram with n = 100 and lambda = 0.5")
+qqnorm(x, main = "n = 100 and lambda = 0.5")
+qqline(x, col= "red")
+```
+The distribution doesn't look normal.
+
+
+```{r}
+x = poisson_st[[6]]
+x
+hist(x, main = "Histogram with n = 100 and lambda = 1")
+qqnorm(x, main = "n = 100 and lambda = 1")
+qqline(x, col= "red")
+```
+The distribution doesn't look normal.
+
+
+```{r}
+x = poisson_st[[7]]
+x
+hist(x, main = "Histogram with n = 100 and lambda = 10")
+qqnorm(x, main = "n = 100 and lambda = 10")
+qqline(x, col= "red")
+```
+
+The distribution doesn't look normal.
+
+
+
+```{r}
+x = poisson_st[[8]]
+x
+hist(x, main = "Histogram with n = 100 and lambda = 100")
+qqnorm(x, main = "n = 100 and lambda = 100")
+qqline(x, col= "red")
+```
+
+## Normal both
+
+```{r}
+x = poisson_st[[9]]
+x
+hist(x, main = "Histogram with n = 1000 and lambda = 0.5")
+qqnorm(x, main = "n = 1000 and lambda = 0.5")
+qqline(x, col= "red")
+```
+The distribution doesn't look normal.
+
+
+```{r}
+x = poisson_st[[10]]
+x
+hist(x, main = "Histogram with n = 1000 and lambda = 1")
+qqnorm(x, main = "n = 1000 and lambda = 1")
+qqline(x, col= "red")
+```
+The distribution doesn't look normal.
+
+
+```{r}
+x = poisson_st[[11]]
+x
+hist(x, main = "Histogram with n = 1000 and lambda = 10")
+qqnorm(x, main = "n = 1000 and lambda = 10")
+qqline(x, col= "red")
+```
+
+## Hist - shows normally QQ- Not instead shows stepped pattern
+
+```{r}
+x = poisson_st[[12]]
+x
+hist(x, main = "Histogram with n = 1000 and lambda = 100")
+qqnorm(x, main = "n = 1000 and lambda = 100")
+qqline(x, col= "red")
+```
+The distribution looks normal.
+
+ 
 
 ### Task 2
 
